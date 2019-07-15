@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class FuncionObjetivo
+    public class FuncionObjetivo : VectorVariable
     {
-        public VariableLista NombreVariables { get; set; }
-        public IEnumerable<double> ValorVariables { get; set; }
         public bool SiMaximizar { get; set; }
     }
 }

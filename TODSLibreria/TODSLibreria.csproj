@@ -47,6 +47,7 @@
     <Compile Include="SimplexEntity\RestriccionEstandarizada.cs" />
     <Compile Include="SimplexEntity\TablaSimplex.cs" />
     <Compile Include="SimplexEntity\VariableLista.cs" />
+    <Compile Include="SimplexEntity\VectorVariable.cs" />
     <Compile Include="SimplexService\SimplexTService.cs" />
     <Compile Include="SimplexService\OperacionesVectoriales.cs" />
   </ItemGroup>

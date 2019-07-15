@@ -6,10 +6,8 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class RestriccionEstandarizada
+    public class RestriccionEstandarizada :VectorVariable
     {
-        public VariableLista ListaNombre { get; set; }
-        public double TerminoIndependinte { get; set; }
         public string VariableHolgura { get; set; }
         public double ValorVariableHolgura { get; set; }
     }
