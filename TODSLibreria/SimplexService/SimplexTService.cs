@@ -16,6 +16,11 @@ namespace TODSLibreria.SimplexService
             if(restriccions != null && restriccions.Count() > 0)
             {
 
+                List<Restriccion> Rmenor = restriccions.Where(r => r.Operador == "<=").ToList();
+                List<Restriccion> Rmayor = restriccions.Where(r => r.Operador == ">=").ToList();
+
+               
+
             }
 
             return resultado;
