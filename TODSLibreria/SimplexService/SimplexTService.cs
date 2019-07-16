@@ -60,6 +60,17 @@ namespace TODSLibreria.SimplexService
         {
             bool siCorrecto = false;
 
+            if(tabla != null)
+            {
+                KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>("",0);
+
+                foreach (KeyValuePair<string,double> kv in tabla.FuncionObjetivo.CuerpoVector)
+                {
+                    if (kv.Value < variableMinima.Value) variableMinima = kv;
+                }
+
+
+            }
             return siCorrecto;
         }
 
