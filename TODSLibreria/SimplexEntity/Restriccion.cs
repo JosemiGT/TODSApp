@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class Restriccion : VectorVariable
+    public class Restriccion : EcuacionVectorial
     {
         public string Operador { get; set; }
-        public double TerminoIndependiente { get; set; }
     }
 }

@@ -16,12 +16,40 @@ namespace TODSLibreria.SimplexService
             if(restriccions != null && restriccions.Count() > 0)
             {
                 List <RestriccionEstandarizada> restriccionEstandarizadas = new List<RestriccionEstandarizada>();
-                List<string> variablesHolgura = ObtenerVariablesDeHolgura(restriccions.Count()).ToList();
-               // restriccionEstandarizadas.Add
+                int iteracion = 0;
 
-                List<Restriccion> Rmenor = restriccions.Where(r => r.Operador == "<=").ToList();
-                List<Restriccion> Rmayor = restriccions.Where(r => r.Operador == ">=").ToList();
-             
+                foreach(Restriccion r in restriccions)
+                {
+                    RestriccionEstandarizada re = new RestriccionEstandarizada
+                    {
+                        CuerpoVector = r.CuerpoVector,
+                        VariableHolgura = string.Format("S{0}", iteracion),                       
+                    };
+
+                    if (r.Operador == "<=") re.ValorVariableHolgura = 1;
+                    else if (r.Operador == ">=") re.ValorVariableHolgura = -1;
+
+                    iteracion++;
+                    resultado.Add(re);
+                }            
+            }
+            return resultado;
+        }
+
+        public IEnumerable<RestriccionEstandarizada> EstandarizarVector (IEnumerable<RestriccionEstandarizada> restriccions)
+        {
+            List<RestriccionEstandarizada> resultado = restriccions.ToList();
+
+            if(restriccions != null && restriccions.Count() > 0)
+            {
+                foreach(RestriccionEstandarizada re in restriccions)
+                {
+                    foreach(RestriccionEstandarizada result in resultado)
+                    {
+                        if (re.VariableHolgura == result.VariableHolgura) result.CuerpoVector.Add(re.VariableHolgura, re.ValorVariableHolgura);
+                        else result.CuerpoVector.Add(re.VariableHolgura, 0);
+                    }
+                }
             }
 
             return resultado;
@@ -41,7 +69,6 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
         
-
         private IEnumerable<string> ObtenerVariablesDeHolgura(int numRestricciones)
         {
             List<string> variablesHolgura = new List<string>();

@@ -9,7 +9,7 @@ namespace TODSLibreria.SimplexService
 {
     public class OperacionesVectoriales
     {
-        public IEnumerable<double> OperacionV1maspivoteV2(IEnumerable<double> r1, string operacion, double valorPivote, IEnumerable<double> r2)
+        public IEnumerable<double> OperacionV1parametroV2(IEnumerable<double> r1, string operacion, double valorPivote, IEnumerable<double> r2)
         {
             if (r1.Count() == r2.Count())
                 switch (operacion)

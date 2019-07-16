@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class FuncionObjetivo : VectorVariable
+    public class FuncionObjetivo : EcuacionVectorial
     {
         public bool SiMaximizar { get; set; }
     }

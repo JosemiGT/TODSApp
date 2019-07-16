@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class VectorVariable
+    public class EcuacionVectorial
     {
         public IDictionary<string, double> CuerpoVector { get; set; }
         public IEnumerable<string> NombresVariables { get { return CuerpoVector.Select(r => r.Key); } }
         public IEnumerable<double> CuerpoNum { get { return CuerpoVector.Select(r => r.Value); } }
+        public float TerminoIndependiente { get; set; }
     }
 }

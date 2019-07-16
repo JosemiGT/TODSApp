@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class RestriccionEstandarizada :VectorVariable
+    public class RestriccionEstandarizada :EcuacionVectorial
     {
         public string VariableHolgura { get; set; }
         public double ValorVariableHolgura { get; set; }
