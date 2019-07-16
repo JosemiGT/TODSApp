@@ -10,5 +10,6 @@ namespace TODSLibreria.SimplexEntity
     {
         public string VariableHolgura { get; set; }
         public double ValorVariableHolgura { get; set; }
+
     }
 }

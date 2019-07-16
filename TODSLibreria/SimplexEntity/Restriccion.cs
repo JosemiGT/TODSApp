@@ -10,18 +10,14 @@ namespace TODSLibreria.SimplexEntity
     {
         public string Operador { get; set; }
 
-        public Restriccion (IDictionary<string, double> diccionariVector, string op, double terminoIndepe)
+        public Restriccion (IDictionary<string, double> diccionariVector, string op, double terminoIndepe) : base (diccionariVector, terminoIndepe)
         {
-            CuerpoVector = diccionariVector;
             Operador = op;
-            TerminoIndependiente = terminoIndepe;
         }
 
-        public Restriccion(IEnumerable<string>Cabecera, IEnumerable<double> vector, string op, double terminoIndepe)
+        public Restriccion(IEnumerable<string>Cabecera, IEnumerable<double> vector, string op, double terminoIndepe) : base (Cabecera, vector, terminoIndepe)
         {
-            CuerpoVector = Cabecera.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
             Operador = op;
-            TerminoIndependiente = terminoIndepe;
         }
 
     }
