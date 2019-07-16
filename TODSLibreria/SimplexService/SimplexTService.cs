@@ -23,7 +23,8 @@ namespace TODSLibreria.SimplexService
                     RestriccionEstandarizada re = new RestriccionEstandarizada
                     {
                         CuerpoVector = r.CuerpoVector,
-                        VariableHolgura = string.Format("S{0}", iteracion),                       
+                        VariableHolgura = string.Format("S{0}", iteracion),   
+                        TerminoIndependiente = r.TerminoIndependiente
                     };
 
                     if (r.Operador == "<=") re.ValorVariableHolgura = 1;

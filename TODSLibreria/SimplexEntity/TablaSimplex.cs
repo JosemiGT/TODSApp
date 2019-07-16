@@ -10,15 +10,14 @@ namespace TODSLibreria.SimplexEntity
     {
         public FuncionObjetivo FuncionObjetivo { get; set; }
         public IEnumerable<EcuacionVectorial> Restricciones { get; set; }
-        public IDictionary<string, float> Base { get; set; }
+        public IDictionary<string, double> Base { get; set; }
 
         public TablaSimplex(FuncionObjetivo fo, IEnumerable<RestriccionEstandarizada> restriccions)
         {
             this.FuncionObjetivo = fo;
             this.Restricciones = restriccions.ToList();
-            this.Base = new Dictionary<string, float>();
+            this.Base = new Dictionary<string, double>();
             foreach(RestriccionEstandarizada re in restriccions) { Base.Add(re.VariableHolgura, re.TerminoIndependiente); }
-
         }
 
     }
