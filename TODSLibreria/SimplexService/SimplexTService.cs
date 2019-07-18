@@ -62,14 +62,15 @@ namespace TODSLibreria.SimplexService
 
             if(tabla != null)
             {
-                KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>("",0);
+                KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>();
 
                 foreach (KeyValuePair<string,double> kv in tabla.FuncionObjetivo.CuerpoVector)
                 {
                     if (kv.Value < variableMinima.Value) variableMinima = kv;
                 }
 
-
+                KeyValuePair<string, double> pivote = ObtenerPivote(variableMinima, ref tabla);
+                
             }
             return siCorrecto;
         }
@@ -96,6 +97,18 @@ namespace TODSLibreria.SimplexService
             }
 
             return variablesHolgura;
+        }
+
+        private KeyValuePair<string,double> ObtenerPivote(KeyValuePair<string,double> variableMinima, ref TablaSimplex tabla)
+        {
+            KeyValuePair<string, double> pivote = new KeyValuePair<string, double>();
+
+            if(!string.IsNullOrEmpty(variableMinima.Key) && tabla != null)
+            {
+               var datos = tabla.Restricciones.Select(r => r.CuerpoVector.Where(v => v.Key == variableMinima.Key).Select(v => v.Value));
+            }
+
+            return pivote;
         }
     }
 }

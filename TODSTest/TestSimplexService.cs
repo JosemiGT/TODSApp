@@ -40,7 +40,7 @@ namespace TODSTest
 
             TablaSimplex ts = new TablaSimplex(FO, result);
 
-
+            stService.PivotarTSimplex(ref ts);
         }
 
         [TestMethod]
