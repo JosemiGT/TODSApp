@@ -56,6 +56,32 @@ namespace TODSLibreria.SimplexService
             return resultado;
         }
 
+        public bool EstandarizarFuncionObjetivo(IEnumerable<RestriccionEstandarizada> restricciones, ref FuncionObjetivo fo)
+        {
+            bool siCorrecto = false;
+
+            if(restricciones != null && restricciones.Count() > 0 && fo != null && fo.CuerpoVector != null)
+            {
+                Dictionary<string, double> valoresFO = new Dictionary<string, double>(fo.CuerpoVector);
+
+                //foreach (KeyValuePair<string, double> cv in valoresFO) { }
+
+                foreach (KeyValuePair<string,double> cv in valoresFO)
+                {
+                    fo.CuerpoVector[cv.Key] = -cv.Value;
+                }
+
+                foreach(RestriccionEstandarizada r in restricciones)
+                {
+                    fo.CuerpoVector.Add(r.VariableHolgura, 0);
+                }
+
+                siCorrecto = true;
+            }
+
+            return siCorrecto;
+        }
+
         public bool PivotarTSimplex (ref TablaSimplex tabla)
         {
             bool siCorrecto = false;
@@ -66,7 +92,7 @@ namespace TODSLibreria.SimplexService
 
                 foreach (KeyValuePair<string,double> kv in tabla.FuncionObjetivo.CuerpoVector)
                 {
-                    if (kv.Value < variableMinima.Value) variableMinima = kv;
+                    if (tabla.FuncionObjetivo.SiMaximizar && kv.Value < variableMinima.Value) variableMinima = kv;
                 }
 
                 KeyValuePair<string, double> pivote = ObtenerPivote(variableMinima, ref tabla);
@@ -99,16 +125,24 @@ namespace TODSLibreria.SimplexService
             return variablesHolgura;
         }
 
-        private KeyValuePair<string,double> ObtenerPivote(KeyValuePair<string,double> variableMinima, ref TablaSimplex tabla)
+        private KeyValuePair<string, double> ObtenerPivote(KeyValuePair<string,double> variableMinima, ref TablaSimplex tabla)
         {
-            KeyValuePair<string, double> pivote = new KeyValuePair<string, double>();
 
-            if(!string.IsNullOrEmpty(variableMinima.Key) && tabla != null)
+            double valorCompareIteracion = new double();
+            string restriccionS = string.Empty;
+
+            if (tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MaxValue;
+            else if (!tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MinValue;
+
+            foreach (EcuacionVectorial ev in tabla.Restricciones)
             {
-               var datos = tabla.Restricciones.Select(r => r.CuerpoVector.Where(v => v.Key == variableMinima.Key).Select(v => v.Value));
+                double iteracionN = ev.CuerpoVector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
+                string iteracionS = ev.CuerpoVector.Where(v => v.Value == 1 || v.Value == -1).FirstOrDefault().Key;
+                if (tabla.FuncionObjetivo.SiMaximizar && (ev.TerminoIndependiente / iteracionN) < valorCompareIteracion) { valorCompareIteracion = iteracionN; restriccionS = iteracionS; }
+                else if (!tabla.FuncionObjetivo.SiMaximizar && (ev.TerminoIndependiente / iteracionN) > valorCompareIteracion) { valorCompareIteracion = iteracionN; restriccionS = iteracionS; }
             }
 
-            return pivote;
+            return new KeyValuePair<string, double>(restriccionS,valorCompareIteracion);
         }
     }
 }

@@ -38,9 +38,14 @@ namespace TODSTest
 
             result = stService.EstandarizarVector(result);
 
-            TablaSimplex ts = new TablaSimplex(FO, result);
+            if(stService.EstandarizarFuncionObjetivo(result, ref FO))
+            {
+                TablaSimplex ts = new TablaSimplex(FO, result);
 
-            stService.PivotarTSimplex(ref ts);
+                stService.PivotarTSimplex(ref ts);
+            }
+
+
         }
 
         [TestMethod]
