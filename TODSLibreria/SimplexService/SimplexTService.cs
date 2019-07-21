@@ -23,7 +23,7 @@ namespace TODSLibreria.SimplexService
                     RestriccionEstandarizada re = new RestriccionEstandarizada
                     {
                         CuerpoVector = r.CuerpoVector,
-                        VariableHolgura = string.Format("S{0}", iteracion),   
+                        VariableHolgura = string.Format("S{0}", iteracion + 1),   
                         TerminoIndependiente = r.TerminoIndependiente
                     };
 
@@ -63,8 +63,6 @@ namespace TODSLibreria.SimplexService
             if(restricciones != null && restricciones.Count() > 0 && fo != null && fo.CuerpoVector != null)
             {
                 Dictionary<string, double> valoresFO = new Dictionary<string, double>(fo.CuerpoVector);
-
-                //foreach (KeyValuePair<string, double> cv in valoresFO) { }
 
                 foreach (KeyValuePair<string,double> cv in valoresFO)
                 {
@@ -137,7 +135,7 @@ namespace TODSLibreria.SimplexService
             foreach (EcuacionVectorial ev in tabla.Restricciones)
             {
                 double iteracionN = ev.CuerpoVector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
-                string iteracionS = ev.CuerpoVector.Where(v => v.Value == 1 || v.Value == -1).FirstOrDefault().Key;
+                string iteracionS = !string.IsNullOrEmpty(ev.Nombre) ? ev.Nombre : string.Empty;
                 if (tabla.FuncionObjetivo.SiMaximizar && (ev.TerminoIndependiente / iteracionN) < valorCompareIteracion) { valorCompareIteracion = iteracionN; restriccionS = iteracionS; }
                 else if (!tabla.FuncionObjetivo.SiMaximizar && (ev.TerminoIndependiente / iteracionN) > valorCompareIteracion) { valorCompareIteracion = iteracionN; restriccionS = iteracionS; }
             }

@@ -28,7 +28,7 @@ namespace TODSLibreria.SimplexEntity
 
             foreach(RestriccionEstandarizada re in restricciones)
             {
-                ecuaciones.Add(new EcuacionVectorial(re.CuerpoVector, re.TerminoIndependiente));
+                ecuaciones.Add(new EcuacionVectorial(re.VariableHolgura, re.CuerpoVector, re.TerminoIndependiente));
             }
 
             return ecuaciones;
