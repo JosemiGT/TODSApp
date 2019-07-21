@@ -94,14 +94,19 @@ namespace TODSLibreria.SimplexService
                 }
 
                 KeyValuePair<string, double> pivote = ObtenerPivote(variableMinima, ref tabla);
-                
+                siCorrecto = true;
             }
             return siCorrecto;
         }
 
-        public bool ReducirColumnas(ref TablaSimplex tabla, string pivote)
+        public bool ReducirColumnas(ref TablaSimplex tabla, KeyValuePair<string, double> pivote, string variableMinima)
         {
             bool siCorrecto = false;
+
+            if(tabla != null && !string.IsNullOrEmpty(pivote.Key) && !string.IsNullOrEmpty(variableMinima))
+            {
+
+            }
 
             return siCorrecto;
         }
