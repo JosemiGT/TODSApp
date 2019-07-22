@@ -10,17 +10,14 @@ namespace TODSLibreria.SimplexEntity
     {
         public FuncionObjetivo FuncionObjetivo { get; set; }
         public IEnumerable<EcuacionVectorial> Restricciones { get; set; }
-        public IDictionary<string, double> Base { get; set; }
+        public IDictionary<string, KeyValuePair<string,double>> Base { get; set; }
 
         public TablaSimplex(FuncionObjetivo fo, IEnumerable<RestriccionEstandarizada> restriccions)
         {
             this.FuncionObjetivo = fo;
             this.Restricciones = ObtenerEcuaciones(restriccions);
-            this.Base = new Dictionary<string, double>();
-            foreach(RestriccionEstandarizada re in restriccions) { Base.Add(re.VariableHolgura, re.TerminoIndependiente); }
+            this.Base = ObtenerBase(restriccions);          
         }
-
-
 
         private IEnumerable<EcuacionVectorial> ObtenerEcuaciones(IEnumerable<RestriccionEstandarizada> restricciones)
         {
@@ -32,6 +29,18 @@ namespace TODSLibreria.SimplexEntity
             }
 
             return ecuaciones;
+        }
+
+        private IDictionary<string, KeyValuePair<string, double>> ObtenerBase(IEnumerable<RestriccionEstandarizada> restricciones)
+        {
+            Dictionary<string, KeyValuePair<string,double>> _base = new Dictionary<string, KeyValuePair<string, double>>();
+
+            foreach (RestriccionEstandarizada re in restricciones)
+            {
+                _base.Add(re.VariableHolgura, new KeyValuePair<string, double>(re.VariableHolgura, re.TerminoIndependiente));
+            }
+
+            return _base;
         }
 
     }

@@ -110,7 +110,7 @@ namespace TODSLibreria.SimplexService
                 List<EcuacionVectorial> resultado = new List<EcuacionVectorial>();
 
                 EcuacionVectorial evreferencia = tabla.Restricciones.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
-                evreferencia = new EcuacionVectorial(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametroV2(evreferencia.CuerpoNum, "/", pivote.Value, evreferencia.CuerpoNum), op.OperacionV1parametroV2(evreferencia.TerminoIndependiente, "/", pivote.Value, evreferencia.TerminoIndependiente));
+                evreferencia = new EcuacionVectorial(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametro(evreferencia.CuerpoNum, "/", pivote.Value), evreferencia.TerminoIndependiente / pivote.Value);
 
                 foreach (EcuacionVectorial ev in tabla.Restricciones)
                {
@@ -120,16 +120,18 @@ namespace TODSLibreria.SimplexService
                     }
                     else if(ev.Nombre != pivote.Key)
                     {
-                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivote.Value, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, "-", pivote.Value, evreferencia.TerminoIndependiente)));
+                        double pivoteev = ev.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
+                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivoteev, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, "-", pivoteev, evreferencia.TerminoIndependiente)));
                     }
 
                 }
 
-                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivote.Value, evreferencia.CuerpoNum), tabla.FuncionObjetivo.SiMaximizar);
+                double pivotefo = tabla.FuncionObjetivo.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
+                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum),tabla.FuncionObjetivo.TerminoIndependiente -  evreferencia.TerminoIndependiente,tabla.FuncionObjetivo.SiMaximizar);
 
                 tabla.FuncionObjetivo = fo;
                 tabla.Restricciones = resultado;
-                siCorrecto = true;
+                siCorrecto = ActualizarBaseTabla(ref tabla, evreferencia.Nombre, new KeyValuePair<string, double>(variableMinima,evreferencia.TerminoIndependiente));
 
             }
 
@@ -171,6 +173,19 @@ namespace TODSLibreria.SimplexService
             }
 
             return new KeyValuePair<string, double>(restriccionS,valorCompareIteracion);
+        }
+
+        private bool ActualizarBaseTabla (ref TablaSimplex tabla, string nombreEcuacion, KeyValuePair<string,double> nuevoElementoBase)
+        {
+            bool siCorrecto = false;
+
+            if(tabla != null && !string.IsNullOrEmpty(nuevoElementoBase.Key))
+            {
+                tabla.Base[nombreEcuacion] = nuevoElementoBase;
+                siCorrecto = true;
+            }
+
+            return siCorrecto;
         }
     }
 }

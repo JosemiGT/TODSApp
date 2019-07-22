@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TODSLibreria.SimplexEntity;
@@ -57,6 +58,8 @@ namespace TODSTest
             List<double> r2 = new List<double> { 1, 2, 3 };
 
             List<double> s = new List<double>(ov.OperacionV1parametroV2(r1, "/", 2, r2));
+
+            List<double> s2 = r1.Zip(r2, (x, y) => x + y).ToList();
 
         }
     }

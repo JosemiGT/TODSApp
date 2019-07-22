@@ -20,5 +20,14 @@ namespace TODSLibreria.SimplexEntity
             SiMaximizar = siMax;
         }
 
+        public FuncionObjetivo(IDictionary<string, double> vector, double terminoIndepe, bool siMax) : base(vector, terminoIndepe)
+        {
+            SiMaximizar = siMax;
+        }
+
+        public FuncionObjetivo(IEnumerable<string> Cabecera, IEnumerable<double> vector, double terminoIndepe, bool siMax) : base(Cabecera, vector, terminoIndepe)
+        {
+            SiMaximizar = siMax;
+        }
     }
 }
