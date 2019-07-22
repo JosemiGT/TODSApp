@@ -22,7 +22,19 @@ namespace TODSLibreria.SimplexService
                 }
             else return new List<double>();
         }
-            
-        
+
+        public double OperacionV1parametroV2(double r1, string operacion, double valorPivote, double r2)
+        {
+                switch (operacion)
+                {
+                    case "+": return r1 + (valorPivote * r2);
+                    case "-": return r1 - (valorPivote * r2);
+                    case "*": return r1 * (valorPivote * r2);
+                    case "/": return r1 / (valorPivote * r2);
+                    default: return new double();
+                }
+
+        }
+
     }
 }

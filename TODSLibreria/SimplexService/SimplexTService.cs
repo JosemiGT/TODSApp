@@ -80,20 +80,20 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
 
-        public bool PivotarTSimplex (ref TablaSimplex tabla)
+        public bool PivotarTSimplex (ref TablaSimplex tabla, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote)
         {
             bool siCorrecto = false;
+            variableMinima = new KeyValuePair<string, double>();
+            pivote = new KeyValuePair<string, double>();
 
-            if(tabla != null)
+            if (tabla != null)
             {
-                KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>();
-
                 foreach (KeyValuePair<string,double> kv in tabla.FuncionObjetivo.CuerpoVector)
                 {
                     if (tabla.FuncionObjetivo.SiMaximizar && kv.Value < variableMinima.Value) variableMinima = kv;
                 }
 
-                KeyValuePair<string, double> pivote = ObtenerPivote(variableMinima, ref tabla);
+                pivote = ObtenerPivote(variableMinima, ref tabla);
                 siCorrecto = true;
             }
             return siCorrecto;
@@ -105,6 +105,31 @@ namespace TODSLibreria.SimplexService
 
             if(tabla != null && !string.IsNullOrEmpty(pivote.Key) && !string.IsNullOrEmpty(variableMinima))
             {
+
+                OperacionesVectoriales op = new OperacionesVectoriales();
+                List<EcuacionVectorial> resultado = new List<EcuacionVectorial>();
+
+                EcuacionVectorial evreferencia = tabla.Restricciones.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
+                evreferencia = new EcuacionVectorial(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametroV2(evreferencia.CuerpoNum, "/", pivote.Value, evreferencia.CuerpoNum), op.OperacionV1parametroV2(evreferencia.TerminoIndependiente, "/", pivote.Value, evreferencia.TerminoIndependiente));
+
+                foreach (EcuacionVectorial ev in tabla.Restricciones)
+               {
+                    if(ev.Nombre == pivote.Key)
+                    {
+                        resultado.Add(evreferencia);                      
+                    }
+                    else if(ev.Nombre != pivote.Key)
+                    {
+                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivote.Value, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, "-", pivote.Value, evreferencia.TerminoIndependiente)));
+                    }
+
+                }
+
+                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivote.Value, evreferencia.CuerpoNum), tabla.FuncionObjetivo.SiMaximizar);
+
+                tabla.FuncionObjetivo = fo;
+                tabla.Restricciones = resultado;
+                siCorrecto = true;
 
             }
 

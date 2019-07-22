@@ -42,17 +42,21 @@ namespace TODSTest
             {
                 TablaSimplex ts = new TablaSimplex(FO, result);
 
-                stService.PivotarTSimplex(ref ts);
+                stService.PivotarTSimplex(ref ts, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
+                stService.ReducirColumnas(ref ts, pivote, variableMinima.Key);
+
             }
-
-
         }
 
         [TestMethod]
-        public void TablaSimplexTest()
+        public void Operaciones()
         {
-            SimplexTService stService = new SimplexTService();
+            OperacionesVectoriales ov = new OperacionesVectoriales();
 
+            List<double> r1 = new List<double> { 1, 2, 3 };
+            List<double> r2 = new List<double> { 1, 2, 3 };
+
+            List<double> s = new List<double>(ov.OperacionV1parametroV2(r1, "/", 2, r2));
 
         }
     }
