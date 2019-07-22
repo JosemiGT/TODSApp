@@ -16,7 +16,7 @@ namespace TODSLibreria.SimplexSpine
         public SimplexSpine(string path)
         {
             string pathParent = Directory.GetParent(path).ToString();
-            ServicioTraza trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToString());
+            ServicioTraza trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToString().Replace(" ","_").Replace("/",""));
             Path = path;
         }
 

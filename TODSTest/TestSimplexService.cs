@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TODSLibreria.SimplexEntity;
 using TODSLibreria.SimplexService;
+using TODSLibreria.SimplexSpine;
 
 namespace TODSTest
 {
@@ -66,7 +67,10 @@ namespace TODSTest
         [TestMethod]
         public void Simplex()
         {
-            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test";
+            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
+
+            SimplexSpine simplex = new SimplexSpine(path);
+            simplex.Ejecutar("Test");
         }
     }
 }
