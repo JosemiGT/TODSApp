@@ -20,5 +20,15 @@ namespace TODSLibreria.SimplexEntity
             Operador = op;
         }
 
+        public Restriccion(string nombre, IDictionary<string, double> diccionariVector, string op, double terminoIndepe) : base(nombre, diccionariVector, terminoIndepe)
+        {
+            Operador = op;
+        }
+
+        public Restriccion(string nombre, IEnumerable<string> Cabecera, IEnumerable<double> vector, string op, double terminoIndepe) : base(nombre, Cabecera, vector, terminoIndepe)
+        {
+            Operador = op;
+        }
+
     }
 }

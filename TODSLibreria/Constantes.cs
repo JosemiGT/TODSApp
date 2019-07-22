@@ -22,6 +22,8 @@ namespace TODSLibreria
         public const string IgualQue = "=";
         public const string MayorIgual = ">=";
         public const string MayorQue = ">";
+        public const string Maximizar = "Max";
+        public const string Minimizar = "Min";
         public const string COferta = "Ofertas";
         public const string CDemanda = "Demandas";
 

@@ -62,5 +62,11 @@ namespace TODSTest
             List<double> s2 = r1.Zip(r2, (x, y) => x + y).ToList();
 
         }
+
+        [TestMethod]
+        public void Simplex()
+        {
+            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test";
+        }
     }
 }
