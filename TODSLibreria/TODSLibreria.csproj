@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constantes.cs" />
     <Compile Include="ODatosExcel\LibroExcel.cs" />
     <Compile Include="ODatosExcel\UsoExcel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -53,6 +54,9 @@
     <Compile Include="SimplexEntity\EcuacionVectorial.cs" />
     <Compile Include="SimplexService\SimplexTService.cs" />
     <Compile Include="SimplexService\OperacionesVectoriales.cs" />
+    <Compile Include="SimplexSpine\ConectorDatosApp.cs" />
+    <Compile Include="SimplexSpine\ServicioTraza.cs" />
+    <Compile Include="SimplexSpine\SimplexSpine.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

@@ -17,10 +17,10 @@ namespace TODSLibreria.SimplexService
             if (r1.Count() == r2.Count())
                 switch (operacion)
                 {
-                    case "+": return r1.Zip(pr2, (x, y) => x + y).ToList();
-                    case "-": return r1.Zip(pr2, (x, y) => x - y).ToList();
-                    case "*": return r1.Zip(pr2, (x, y) => x * y).ToList();
-                    case "/": return r1.Zip(pr2, (x, y) => x / y).ToList();
+                    case Constantes.Suma: return r1.Zip(pr2, (x, y) => x + y).ToList();
+                    case Constantes.Resta: return r1.Zip(pr2, (x, y) => x - y).ToList();
+                    case Constantes.Multiplicacion: return r1.Zip(pr2, (x, y) => x * y).ToList();
+                    case Constantes.Division: return r1.Zip(pr2, (x, y) => x / y).ToList();
                     default: return new List<double>();
                 }
             else return new List<double>();
@@ -30,10 +30,10 @@ namespace TODSLibreria.SimplexService
         {
                 switch (operacion)
                 {
-                    case "+": return r1 + (valorPivote * r2);
-                    case "-": return r1 - (valorPivote * r2);
-                    case "*": return r1 * (valorPivote * r2);
-                    case "/": return r1 / (valorPivote * r2);
+                    case Constantes.Suma: return r1 + (valorPivote * r2);
+                    case Constantes.Resta: return r1 - (valorPivote * r2);
+                    case Constantes.Multiplicacion: return r1 * (valorPivote * r2);
+                    case Constantes.Division: return r1 / (valorPivote * r2);
                     default: return new double();
                 }
 
@@ -44,10 +44,10 @@ namespace TODSLibreria.SimplexService
             if (r1.Count() > 0 && !string.IsNullOrEmpty(operacion))
                 switch (operacion)
                 {
-                    case "+": return r1.Select(r => r + valorPivote).ToList();
-                    case "-": return r1.Select(r => r - valorPivote).ToList();
-                    case "*": return r1.Select(r => r * valorPivote).ToList();
-                    case "/": return r1.Select(r => r / valorPivote).ToList();
+                    case Constantes.Suma: return r1.Select(r => r + valorPivote).ToList();
+                    case Constantes.Resta: return r1.Select(r => r - valorPivote).ToList();
+                    case Constantes.Multiplicacion: return r1.Select(r => r * valorPivote).ToList();
+                    case Constantes.Division: return r1.Select(r => r / valorPivote).ToList();
                     default: return new List<double>();
                 }
             else return new List<double>();
