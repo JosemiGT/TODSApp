@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TODSLibreria.SimplexEntity;
 
 namespace TODSLibreria.SimplexSpine
 {
@@ -17,6 +18,7 @@ namespace TODSLibreria.SimplexSpine
         public ServicioTraza(string path)
         {
             Path = path;
+
             StreamWriter mytxt = File.AppendText(path);
 
             DateTime fechaActual = new DateTime();
@@ -70,9 +72,50 @@ namespace TODSLibreria.SimplexSpine
 
                 foreach (string variable in lista)
                 {
-                    if (!string.IsNullOrEmpty(variable)) { mytxt.WriteLine(variable); mytxt.WriteLine(" "); }
+                    if (!string.IsNullOrEmpty(variable)) { mytxt.Write(variable); mytxt.Write(" "); }
                 }
 
+                mytxt.WriteLine("");
+
+                mytxt.Close();
+
+            }
+        }
+
+        public void TrazaLista(IEnumerable<double> lista)
+        {
+            if (lista != null && lista.Count() > 0)
+            {
+                StreamWriter mytxt = File.AppendText(Path);
+
+                foreach (double variable in lista)
+                {
+                    mytxt.Write(variable.ToString()); mytxt.Write(" "); 
+                }
+
+                mytxt.WriteLine("");
+
+                mytxt.Close();
+
+            }
+        }
+
+        public void TrazaEcuacionVectorial(EcuacionVectorial ev)
+        {
+            if (ev != null && ev.CuerpoVector.Count() > 0)
+            {
+                StreamWriter mytxt = File.AppendText(Path);
+
+                mytxt.WriteLine("");
+
+                foreach (KeyValuePair<string,double> valor in ev.CuerpoVector)
+                {
+                    mytxt.WriteLine("{0} --> {1}", valor.Key, valor.Value.ToString());
+                }
+
+                mytxt.WriteLine("");
+                mytxt.WriteLine("Termino Independiente: {0}",ev.TerminoIndependiente.ToString());
+                mytxt.WriteLine("");
                 mytxt.Close();
 
             }
