@@ -26,11 +26,22 @@ namespace TODSLibreria.SimplexSpine
             bool siCorrecto = false;
             ConectorDatosApp conector = new ConectorDatosApp();
             SimplexTService service = new SimplexTService();
+            KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>();
+            KeyValuePair<string, double> pivote = new KeyValuePair<string, double>();
 
-            if(conector.ExtraerDatosSimplex(Path, nombreHojaProblema, out TablaSimplex tabla))
+            if (conector.ExtraerDatosSimplex(Path, nombreHojaProblema, out TablaSimplex tabla))
             {
-                service.PivotarTSimplex(ref tabla, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
+                service.PivotarTSimplex(ref tabla, out variableMinima, out pivote);
                 service.ReducirColumnas(ref tabla, pivote, variableMinima.Key);
+
+                while (!service.ComprobarSiFinalizaSimplex(tabla.FuncionObjetivo))
+                {
+                    service.PivotarTSimplex(ref tabla, out variableMinima, out pivote);
+                    service.ReducirColumnas(ref tabla, pivote, variableMinima.Key);
+                }
+
+                Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
+                Trace.TrazaTexto(Constantes.TextoValor);
                 Trace.TrazaEcuacionVectorial(tabla.FuncionObjetivo);
             }
 

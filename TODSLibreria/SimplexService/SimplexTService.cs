@@ -121,13 +121,13 @@ namespace TODSLibreria.SimplexService
                     else if(ev.Nombre != pivote.Key)
                     {
                         double pivoteev = ev.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
-                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivoteev, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, "-", pivoteev, evreferencia.TerminoIndependiente)));
+                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivoteev, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, Constantes.Resta, pivoteev, evreferencia.TerminoIndependiente)));
                     }
 
                 }
 
                 double pivotefo = tabla.FuncionObjetivo.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
-                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum),tabla.FuncionObjetivo.TerminoIndependiente -  evreferencia.TerminoIndependiente,tabla.FuncionObjetivo.SiMaximizar);
+                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum), op.OperacionV1parametroV2(tabla.FuncionObjetivo.TerminoIndependiente, Constantes.Resta, pivotefo, evreferencia.TerminoIndependiente), tabla.FuncionObjetivo.SiMaximizar);
 
                 tabla.FuncionObjetivo = fo;
                 tabla.Restricciones = resultado;
@@ -138,6 +138,19 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
         
+        public bool ComprobarSiFinalizaSimplex(FuncionObjetivo fo)
+        {
+            bool siFinaliza = false;
+
+            if(fo != null)
+            {
+                siFinaliza = !fo.CuerpoNum.Any(n => n < 0) && fo.TerminoIndependiente > 0;
+            }
+
+            return siFinaliza;
+
+        }
+
         private IEnumerable<string> ObtenerVariablesDeHolgura(int numRestricciones)
         {
             List<string> variablesHolgura = new List<string>();
