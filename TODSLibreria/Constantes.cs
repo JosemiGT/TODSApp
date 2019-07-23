@@ -9,6 +9,7 @@ namespace TODSLibreria
     public class Constantes
     {
         public const string ResultadoTxt = "Resultado_";
+        public const string ExtensionTxt = ".txt";
 
         //Utilidades para lógicas
         public static readonly char[] Separadores = { ',', ';', '/' };

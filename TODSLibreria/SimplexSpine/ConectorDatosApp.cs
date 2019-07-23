@@ -27,7 +27,7 @@ namespace TODSLibreria.SimplexSpine
                     helperExcel.ObtenerDimensionesHoja(indiceHoja, out int countFila, out int countCol))
                 {
                     string[,] datosH = helperExcel.ObtenerDatosHoja(NombreHoja);
-                    List<Restriccion> restricciones = ObtenerEcuaciones(datosH, countFila, countCol, out List<string> cabecera, out FuncionObjetivo funcionObjetivo);
+                    List<Restriccion> restricciones = ObtenerEcuaciones(datosH, countFila - 1, countCol - 1, out List<string> cabecera, out FuncionObjetivo funcionObjetivo);
                     List<RestriccionEstandarizada> restriccionesEstand = stService.EstandarizarRestricciones(restricciones).ToList();
                     restriccionesEstand = stService.EstandarizarVector(restriccionesEstand).ToList();
                     if(stService.EstandarizarFuncionObjetivo(restriccionesEstand, ref funcionObjetivo)) { tabla = new TablaSimplex(funcionObjetivo, restriccionesEstand); siCorrecto = true; }
@@ -80,7 +80,7 @@ namespace TODSLibreria.SimplexSpine
 
             if (datos != null && !Decimal.TryParse(datos[0, 0], out decimal num))
             {
-                for(int j = 0; j < numCol; j++)
+                for(int i = 0; i < numFila; i++)
                 {
                     bool siPasaOperador = false;
                     bool siMax = false;
@@ -89,19 +89,19 @@ namespace TODSLibreria.SimplexSpine
                     List<double> valoresEV = new List<double>();
                     double terminoIndepe = Double.NaN;
 
-                    if(j == 0)
+                    if(i == 0)
                     {
-                        for (int i = 1; i < numFila; i++)
+                        for (int j = 1; j < numCol; j++)
                         {
-                            cabeceraFilas.Add(datos[i, 0]);
+                            cabeceraFilas.Add(datos[i, j]);
                         }
                     }
                     else
                     {
-                        for (int i = 0; i < numFila; i++)
+                        for (int j = 0; j < numCol; j++)
                         {
                             double numA = Double.NaN;
-                            if (i == 0) { nombreEV = datos[i, j]; }
+                            if (j == 0) { nombreEV = datos[i, j]; }
                             else if (Double.TryParse(datos[i, j], out numA) && !siPasaOperador) { valoresEV.Add(numA); }
                             else if (!Double.TryParse(datos[i, j], out numA) && !siPasaOperador) { operador = datos[i, j]; siPasaOperador = true; }
                             else if (Double.TryParse(datos[i, j], out numA) && siPasaOperador) { terminoIndepe = numA; }
