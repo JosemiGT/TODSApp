@@ -43,8 +43,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constantes.cs" />
+    <Compile Include="FuzzyEntity\TRFN.cs" />
+    <Compile Include="FuzzyEntity\TRFNOperation.cs" />
     <Compile Include="ODatosExcel\LibroExcel.cs" />
     <Compile Include="ODatosExcel\UsoExcel.cs" />
+    <Compile Include="OperacionesNumericas.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SimplexEntity\FuncionObjetivo.cs" />
     <Compile Include="SimplexEntity\Restriccion.cs" />
