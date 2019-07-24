@@ -45,6 +45,9 @@
     <Compile Include="Constantes.cs" />
     <Compile Include="FuzzyEntity\TRFN.cs" />
     <Compile Include="FuzzyEntity\TRFNOperation.cs" />
+    <Compile Include="FuzzySimplexEntity\FuzzyConstraint.cs" />
+    <Compile Include="FuzzySimplexEntity\FuzzyObjectiveFunction.cs" />
+    <Compile Include="FuzzySimplexEntity\FuzzyVectorEquation.cs" />
     <Compile Include="ODatosExcel\LibroExcel.cs" />
     <Compile Include="ODatosExcel\UsoExcel.cs" />
     <Compile Include="OperacionesNumericas.cs" />
