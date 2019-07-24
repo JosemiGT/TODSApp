@@ -100,7 +100,7 @@ namespace TODSLibreria.SimplexSpine
             }
         }
 
-        public void TrazaEcuacionVectorial(EcuacionVectorial ev)
+        public void TrazaEcuacionVectorial(VectorEquation ev)
         {
             if (ev != null && ev.CuerpoVector.Count() > 0)
             {

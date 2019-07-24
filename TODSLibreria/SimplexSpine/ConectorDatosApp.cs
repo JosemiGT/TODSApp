@@ -11,7 +11,7 @@ namespace TODSLibreria.SimplexSpine
 {
     public class ConectorDatosApp
     {
-        public bool ExtraerDatosSimplex(string path, string NombreHoja, out TablaSimplex tabla)
+        public bool ExtraerDatosSimplex(string path, string NombreHoja, out Tableau tabla)
         {
             bool siCorrecto = false;
             tabla = null;
@@ -27,10 +27,10 @@ namespace TODSLibreria.SimplexSpine
                     helperExcel.ObtenerDimensionesHoja(indiceHoja, out int countFila, out int countCol))
                 {
                     string[,] datosH = helperExcel.ObtenerDatosHoja(NombreHoja);
-                    List<Restriccion> restricciones = ObtenerEcuaciones(datosH, countFila - 1, countCol - 1, out List<string> cabecera, out FuncionObjetivo funcionObjetivo);
-                    List<RestriccionEstandarizada> restriccionesEstand = stService.EstandarizarRestricciones(restricciones).ToList();
+                    List<Constraint> restricciones = ObtenerEcuaciones(datosH, countFila - 1, countCol - 1, out List<string> cabecera, out ObjectiveFunction funcionObjetivo);
+                    List<StandardConstraint> restriccionesEstand = stService.EstandarizarRestricciones(restricciones).ToList();
                     restriccionesEstand = stService.EstandarizarVector(restriccionesEstand).ToList();
-                    if(stService.EstandarizarFuncionObjetivo(restriccionesEstand, ref funcionObjetivo)) { tabla = new TablaSimplex(funcionObjetivo, restriccionesEstand); siCorrecto = true; }
+                    if(stService.EstandarizarFuncionObjetivo(restriccionesEstand, ref funcionObjetivo)) { tabla = new Tableau(funcionObjetivo, restriccionesEstand); siCorrecto = true; }
                 }
             }
 
@@ -72,9 +72,9 @@ namespace TODSLibreria.SimplexSpine
             return resultado;
         }
 
-        public List<Restriccion> ObtenerEcuaciones(string[,] datos, int numFila, int numCol, out List<string> cabeceraFilas, out FuncionObjetivo funcionObjetivo)
+        public List<Constraint> ObtenerEcuaciones(string[,] datos, int numFila, int numCol, out List<string> cabeceraFilas, out ObjectiveFunction funcionObjetivo)
         {
-            List<Restriccion> ecuaciones = new List<Restriccion>();
+            List<Constraint> ecuaciones = new List<Constraint>();
             cabeceraFilas = new List<string>();
             funcionObjetivo = null;
 
@@ -108,8 +108,8 @@ namespace TODSLibreria.SimplexSpine
                             else if (!Double.TryParse(datos[i, j], out numA) && siPasaOperador) { if (datos[i, j] == Constantes.Maximizar) siMax = true; }
                         }
 
-                        if (operador != Constantes.IgualQue) { ecuaciones.Add(new Restriccion(nombreEV, cabeceraFilas, valoresEV, operador, terminoIndepe)); }
-                        else if (operador == Constantes.IgualQue) { funcionObjetivo = new FuncionObjetivo(cabeceraFilas, valoresEV, siMax); }
+                        if (operador != Constantes.IgualQue) { ecuaciones.Add(new Constraint(nombreEV, cabeceraFilas, valoresEV, operador, terminoIndepe)); }
+                        else if (operador == Constantes.IgualQue) { funcionObjetivo = new ObjectiveFunction(cabeceraFilas, valoresEV, siMax); }
                     }
                 }
             }

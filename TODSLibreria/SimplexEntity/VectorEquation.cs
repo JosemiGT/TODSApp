@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class EcuacionVectorial
+    public class VectorEquation
     {
         public string Nombre { get; set; }
         public IDictionary<string, double> CuerpoVector { get; set; }
@@ -14,31 +14,31 @@ namespace TODSLibreria.SimplexEntity
         public IEnumerable<double> CuerpoNum { get { return CuerpoVector.Select(r => r.Value); } }
         public double TerminoIndependiente { get; set; }
 
-        public EcuacionVectorial()
+        public VectorEquation()
         {
 
         }
 
-        public EcuacionVectorial(IDictionary<string, double> cuerpoVector, double termindepe)
+        public VectorEquation(IDictionary<string, double> cuerpoVector, double termindepe)
         {
             CuerpoVector = cuerpoVector;
             TerminoIndependiente = termindepe;
         }
 
-        public EcuacionVectorial(IEnumerable<string> Cabecera, IEnumerable<double> vector, double terminoIndepe)
+        public VectorEquation(IEnumerable<string> Cabecera, IEnumerable<double> vector, double terminoIndepe)
         {
             CuerpoVector = Cabecera.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
             TerminoIndependiente = terminoIndepe;
         }
 
-        public EcuacionVectorial(string nombre, IDictionary<string, double> cuerpoVector, double termindepe)
+        public VectorEquation(string nombre, IDictionary<string, double> cuerpoVector, double termindepe)
         {
             Nombre = nombre;
             CuerpoVector = cuerpoVector;
             TerminoIndependiente = termindepe;
         }
 
-        public EcuacionVectorial(string nombre, IEnumerable<string> Cabecera, IEnumerable<double> vector, double terminoIndepe)
+        public VectorEquation(string nombre, IEnumerable<string> Cabecera, IEnumerable<double> vector, double terminoIndepe)
         {
             Nombre = nombre;
             CuerpoVector = Cabecera.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);

@@ -20,29 +20,29 @@ namespace TODSTest
         public static readonly List<double> vec1 = new List<double> { 6, 4 };
         public static readonly List<double> vec2 = new List<double> { 1, 1 };
 
-        public static readonly Restriccion r1 = new Restriccion(cab, vec1, menorIgual, termIndepe1);
-        public static readonly Restriccion r2 = new Restriccion(cab, vec2, mayorIgual, termIndepe2);
+        public static readonly Constraint r1 = new Constraint(cab, vec1, menorIgual, termIndepe1);
+        public static readonly Constraint r2 = new Constraint(cab, vec2, mayorIgual, termIndepe2);
 
-        public static readonly List<Restriccion> restricciones = new List<Restriccion> { r1, r2 };
+        public static readonly List<Constraint> restricciones = new List<Constraint> { r1, r2 };
         public const double termIndepe1 = 24;
         public const double termIndepe2 = 800;
 
 
 
-        FuncionObjetivo FO = new FuncionObjetivo(cab, fo, true);
+        ObjectiveFunction FO = new ObjectiveFunction(cab, fo, true);
 
         [TestMethod]
         public void EstandarizarRestricciones()
         {
             SimplexTService stService = new SimplexTService();
 
-            IEnumerable<RestriccionEstandarizada> result = stService.EstandarizarRestricciones(restricciones);
+            IEnumerable<StandardConstraint> result = stService.EstandarizarRestricciones(restricciones);
 
             result = stService.EstandarizarVector(result);
 
             if(stService.EstandarizarFuncionObjetivo(result, ref FO))
             {
-                TablaSimplex ts = new TablaSimplex(FO, result);
+                Tableau ts = new Tableau(FO, result);
 
                 stService.PivotarTSimplex(ref ts, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
                 stService.ReducirColumnas(ref ts, pivote, variableMinima.Key);

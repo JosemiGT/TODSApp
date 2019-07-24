@@ -9,18 +9,18 @@ namespace TODSLibreria.SimplexService
 {
     public class SimplexTService
     {
-        public IEnumerable<RestriccionEstandarizada> EstandarizarRestricciones (IEnumerable<Restriccion> restriccions)
+        public IEnumerable<StandardConstraint> EstandarizarRestricciones (IEnumerable<Constraint> restriccions)
         {
-            List <RestriccionEstandarizada> resultado = new List<RestriccionEstandarizada>();
+            List <StandardConstraint> resultado = new List<StandardConstraint>();
 
             if(restriccions != null && restriccions.Count() > 0)
             {
-                List <RestriccionEstandarizada> restriccionEstandarizadas = new List<RestriccionEstandarizada>();
+                List <StandardConstraint> restriccionEstandarizadas = new List<StandardConstraint>();
                 int iteracion = 0;
 
-                foreach(Restriccion r in restriccions)
+                foreach(Constraint r in restriccions)
                 {
-                    RestriccionEstandarizada re = new RestriccionEstandarizada
+                    StandardConstraint re = new StandardConstraint
                     {
                         CuerpoVector = r.CuerpoVector,
                         VariableHolgura = string.Format("S{0}", iteracion + 1),   
@@ -37,15 +37,15 @@ namespace TODSLibreria.SimplexService
             return resultado;
         }
 
-        public IEnumerable<RestriccionEstandarizada> EstandarizarVector (IEnumerable<RestriccionEstandarizada> restriccions)
+        public IEnumerable<StandardConstraint> EstandarizarVector (IEnumerable<StandardConstraint> restriccions)
         {
-            List<RestriccionEstandarizada> resultado = restriccions.ToList();
+            List<StandardConstraint> resultado = restriccions.ToList();
 
             if(restriccions != null && restriccions.Count() > 0)
             {
-                foreach(RestriccionEstandarizada re in restriccions)
+                foreach(StandardConstraint re in restriccions)
                 {
-                    foreach(RestriccionEstandarizada result in resultado)
+                    foreach(StandardConstraint result in resultado)
                     {
                         if (re.VariableHolgura == result.VariableHolgura) result.CuerpoVector.Add(re.VariableHolgura, re.ValorVariableHolgura);
                         else result.CuerpoVector.Add(re.VariableHolgura, 0);
@@ -56,7 +56,7 @@ namespace TODSLibreria.SimplexService
             return resultado;
         }
 
-        public bool EstandarizarFuncionObjetivo(IEnumerable<RestriccionEstandarizada> restricciones, ref FuncionObjetivo fo)
+        public bool EstandarizarFuncionObjetivo(IEnumerable<StandardConstraint> restricciones, ref ObjectiveFunction fo)
         {
             bool siCorrecto = false;
 
@@ -69,7 +69,7 @@ namespace TODSLibreria.SimplexService
                     fo.CuerpoVector[cv.Key] = -cv.Value;
                 }
 
-                foreach(RestriccionEstandarizada r in restricciones)
+                foreach(StandardConstraint r in restricciones)
                 {
                     fo.CuerpoVector.Add(r.VariableHolgura, 0);
                 }
@@ -80,7 +80,7 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
 
-        public bool PivotarTSimplex (ref TablaSimplex tabla, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote)
+        public bool PivotarTSimplex (ref Tableau tabla, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote)
         {
             bool siCorrecto = false;
             variableMinima = new KeyValuePair<string, double>();
@@ -99,7 +99,7 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
 
-        public bool ReducirColumnas(ref TablaSimplex tabla, KeyValuePair<string, double> pivote, string variableMinima)
+        public bool ReducirColumnas(ref Tableau tabla, KeyValuePair<string, double> pivote, string variableMinima)
         {
             bool siCorrecto = false;
 
@@ -107,12 +107,12 @@ namespace TODSLibreria.SimplexService
             {
 
                 OperacionesVectoriales op = new OperacionesVectoriales();
-                List<EcuacionVectorial> resultado = new List<EcuacionVectorial>();
+                List<VectorEquation> resultado = new List<VectorEquation>();
 
-                EcuacionVectorial evreferencia = tabla.Restricciones.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
-                evreferencia = new EcuacionVectorial(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametro(evreferencia.CuerpoNum, "/", pivote.Value), evreferencia.TerminoIndependiente / pivote.Value);
+                VectorEquation evreferencia = tabla.Restricciones.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
+                evreferencia = new VectorEquation(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametro(evreferencia.CuerpoNum, "/", pivote.Value), evreferencia.TerminoIndependiente / pivote.Value);
 
-                foreach (EcuacionVectorial ev in tabla.Restricciones)
+                foreach (VectorEquation ev in tabla.Restricciones)
                {
                     if(ev.Nombre == pivote.Key)
                     {
@@ -121,13 +121,13 @@ namespace TODSLibreria.SimplexService
                     else if(ev.Nombre != pivote.Key)
                     {
                         double pivoteev = ev.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
-                        resultado.Add(new EcuacionVectorial(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivoteev, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, Constantes.Resta, pivoteev, evreferencia.TerminoIndependiente)));
+                        resultado.Add(new VectorEquation(ev.Nombre, ev.NombresVariables, op.OperacionV1parametroV2(ev.CuerpoNum, "-", pivoteev, evreferencia.CuerpoNum), op.OperacionV1parametroV2(ev.TerminoIndependiente, Constantes.Resta, pivoteev, evreferencia.TerminoIndependiente)));
                     }
 
                 }
 
                 double pivotefo = tabla.FuncionObjetivo.CuerpoVector.Where(r => r.Key == variableMinima).FirstOrDefault().Value;
-                FuncionObjetivo fo = new FuncionObjetivo(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum), op.OperacionV1parametroV2(tabla.FuncionObjetivo.TerminoIndependiente, Constantes.Resta, pivotefo, evreferencia.TerminoIndependiente), tabla.FuncionObjetivo.SiMaximizar);
+                ObjectiveFunction fo = new ObjectiveFunction(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum), op.OperacionV1parametroV2(tabla.FuncionObjetivo.TerminoIndependiente, Constantes.Resta, pivotefo, evreferencia.TerminoIndependiente), tabla.FuncionObjetivo.SiMaximizar);
 
                 tabla.FuncionObjetivo = fo;
                 tabla.Restricciones = resultado;
@@ -138,7 +138,7 @@ namespace TODSLibreria.SimplexService
             return siCorrecto;
         }
         
-        public bool ComprobarSiFinalizaSimplex(FuncionObjetivo fo)
+        public bool ComprobarSiFinalizaSimplex(ObjectiveFunction fo)
         {
             bool siFinaliza = false;
 
@@ -168,7 +168,7 @@ namespace TODSLibreria.SimplexService
             return variablesHolgura;
         }
 
-        private KeyValuePair<string, double> ObtenerPivote(KeyValuePair<string,double> variableMinima, ref TablaSimplex tabla)
+        private KeyValuePair<string, double> ObtenerPivote(KeyValuePair<string,double> variableMinima, ref Tableau tabla)
         {
 
             double valorCompareIteracion = new double();
@@ -177,7 +177,7 @@ namespace TODSLibreria.SimplexService
             if (tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MaxValue;
             else if (!tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MinValue;
 
-            foreach (EcuacionVectorial ev in tabla.Restricciones)
+            foreach (VectorEquation ev in tabla.Restricciones)
             {
                 double iteracionN = ev.CuerpoVector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
                 string iteracionS = !string.IsNullOrEmpty(ev.Nombre) ? ev.Nombre : string.Empty;
@@ -188,7 +188,7 @@ namespace TODSLibreria.SimplexService
             return new KeyValuePair<string, double>(restriccionS,valorCompareIteracion);
         }
 
-        private bool ActualizarBaseTabla (ref TablaSimplex tabla, string nombreEcuacion, KeyValuePair<string,double> nuevoElementoBase)
+        private bool ActualizarBaseTabla (ref Tableau tabla, string nombreEcuacion, KeyValuePair<string,double> nuevoElementoBase)
         {
             bool siCorrecto = false;
 

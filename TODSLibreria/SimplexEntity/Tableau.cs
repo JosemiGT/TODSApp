@@ -6,36 +6,36 @@ using System.Threading.Tasks;
 
 namespace TODSLibreria.SimplexEntity
 {
-    public class TablaSimplex
+    public class Tableau
     {
-        public FuncionObjetivo FuncionObjetivo { get; set; }
-        public IEnumerable<EcuacionVectorial> Restricciones { get; set; }
+        public ObjectiveFunction FuncionObjetivo { get; set; }
+        public IEnumerable<VectorEquation> Restricciones { get; set; }
         public IDictionary<string, KeyValuePair<string,double>> Base { get; set; }
 
-        public TablaSimplex(FuncionObjetivo fo, IEnumerable<RestriccionEstandarizada> restriccions)
+        public Tableau(ObjectiveFunction fo, IEnumerable<StandardConstraint> restriccions)
         {
             this.FuncionObjetivo = fo;
             this.Restricciones = ObtenerEcuaciones(restriccions);
             this.Base = ObtenerBase(restriccions);          
         }
 
-        private IEnumerable<EcuacionVectorial> ObtenerEcuaciones(IEnumerable<RestriccionEstandarizada> restricciones)
+        private IEnumerable<VectorEquation> ObtenerEcuaciones(IEnumerable<StandardConstraint> restricciones)
         {
-            List<EcuacionVectorial> ecuaciones = new List<EcuacionVectorial>();
+            List<VectorEquation> ecuaciones = new List<VectorEquation>();
 
-            foreach(RestriccionEstandarizada re in restricciones)
+            foreach(StandardConstraint re in restricciones)
             {
-                ecuaciones.Add(new EcuacionVectorial(re.VariableHolgura, re.CuerpoVector, re.TerminoIndependiente));
+                ecuaciones.Add(new VectorEquation(re.VariableHolgura, re.CuerpoVector, re.TerminoIndependiente));
             }
 
             return ecuaciones;
         }
 
-        private IDictionary<string, KeyValuePair<string, double>> ObtenerBase(IEnumerable<RestriccionEstandarizada> restricciones)
+        private IDictionary<string, KeyValuePair<string, double>> ObtenerBase(IEnumerable<StandardConstraint> restricciones)
         {
             Dictionary<string, KeyValuePair<string,double>> _base = new Dictionary<string, KeyValuePair<string, double>>();
 
-            foreach (RestriccionEstandarizada re in restricciones)
+            foreach (StandardConstraint re in restricciones)
             {
                 _base.Add(re.VariableHolgura, new KeyValuePair<string, double>(re.VariableHolgura, re.TerminoIndependiente));
             }

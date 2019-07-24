@@ -29,7 +29,7 @@ namespace TODSLibreria.SimplexSpine
             KeyValuePair<string, double> variableMinima = new KeyValuePair<string, double>();
             KeyValuePair<string, double> pivote = new KeyValuePair<string, double>();
 
-            if (conector.ExtraerDatosSimplex(Path, nombreHojaProblema, out TablaSimplex tabla))
+            if (conector.ExtraerDatosSimplex(Path, nombreHojaProblema, out Tableau tabla))
             {
                 service.PivotarTSimplex(ref tabla, out variableMinima, out pivote);
                 service.ReducirColumnas(ref tabla, pivote, variableMinima.Key);
