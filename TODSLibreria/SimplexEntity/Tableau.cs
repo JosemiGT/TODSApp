@@ -9,17 +9,17 @@ namespace TODSLibreria.SimplexEntity
     public class Tableau
     {
         public ObjectiveFunction FuncionObjetivo { get; set; }
-        public IEnumerable<VectorEquation> Restricciones { get; set; }
+        public IEnumerable<VectorEquation> StandardConstraint { get; set; }
         public IDictionary<string, KeyValuePair<string,double>> Base { get; set; }
 
         public Tableau(ObjectiveFunction fo, IEnumerable<StandardConstraint> restriccions)
         {
             this.FuncionObjetivo = fo;
-            this.Restricciones = ObtenerEcuaciones(restriccions);
-            this.Base = ObtenerBase(restriccions);          
+            this.StandardConstraint = GetConstraint(restriccions);
+            this.Base = GetBase(restriccions);          
         }
 
-        private IEnumerable<VectorEquation> ObtenerEcuaciones(IEnumerable<StandardConstraint> restricciones)
+        private IEnumerable<VectorEquation> GetConstraint(IEnumerable<StandardConstraint> restricciones)
         {
             List<VectorEquation> ecuaciones = new List<VectorEquation>();
 
@@ -31,7 +31,7 @@ namespace TODSLibreria.SimplexEntity
             return ecuaciones;
         }
 
-        private IDictionary<string, KeyValuePair<string, double>> ObtenerBase(IEnumerable<StandardConstraint> restricciones)
+        private IDictionary<string, KeyValuePair<string, double>> GetBase(IEnumerable<StandardConstraint> restricciones)
         {
             Dictionary<string, KeyValuePair<string,double>> _base = new Dictionary<string, KeyValuePair<string, double>>();
 
