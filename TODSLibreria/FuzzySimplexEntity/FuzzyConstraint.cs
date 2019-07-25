@@ -11,6 +11,7 @@ namespace TODSLibreria.FuzzySimplexEntity
     {
         public string Operator { get; set; }
 
+        #region Constructors - Full term fuzzy.
         public FuzzyConstraint(IDictionary<string, TRFN> cuerpoVector, string oper, TRFN termindepe) : base(cuerpoVector, termindepe)
         {
             Operator = oper;
@@ -30,5 +31,28 @@ namespace TODSLibreria.FuzzySimplexEntity
         {
             Operator = oper;
         }
+        #endregion
+
+        #region Constructors - Only independent term fuzzy.
+        public FuzzyConstraint(IDictionary<string, double> cuerpoVector, string oper, TRFN termindepe) : base(cuerpoVector, termindepe)
+        {
+            Operator = oper;
+        }
+
+        public FuzzyConstraint(IEnumerable<string> Cabecera, IEnumerable<double> vector, string oper, TRFN terminoIndepe) : base(Cabecera, vector, terminoIndepe)
+        {
+            Operator = oper;
+        }
+
+        public FuzzyConstraint(string nombre, IDictionary<string, double> cuerpoVector, string oper, TRFN termindepe) : base(nombre, cuerpoVector, termindepe)
+        {
+            Operator = oper;
+        }
+
+        public FuzzyConstraint(string nombre, IEnumerable<string> Cabecera, IEnumerable<double> vector, string oper, TRFN terminoIndepe) : base(nombre, Cabecera, vector, terminoIndepe)
+        {
+            Operator = oper;
+        }
+        #endregion
     }
 }

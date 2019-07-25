@@ -56,6 +56,42 @@ namespace TODSLibreria.SimplexService
             return resultado;
         }
 
+        public IEnumerable<VectorEquation> StandardizeConstraints(IEnumerable<Constraint> constraintList)
+        {
+            List<VectorEquation> standardConstraints = new List<VectorEquation>();
+
+            if (constraintList != null && constraintList.Count() > 0)
+            {
+                int indice = 1;
+                List<string> standardHeader = new List<string>();
+
+                standardHeader = constraintList.Select(x => x.NombresVariables).FirstOrDefault().ToList();
+
+                foreach (Constraint c in constraintList)
+                {
+                    standardHeader.Add(string.Format("S{0}", indice.ToString()));
+                    indice++;
+                }
+
+                foreach (Constraint c in constraintList)
+                {
+                    Dictionary<string, double> values = new Dictionary<string, double>();
+
+                    foreach (string header in standardHeader)
+                    {
+                        if (c.CuerpoVector.Any(cv => cv.Key == header)) { values.Add(header, c.CuerpoVector.Where(cv => cv.Key == header).FirstOrDefault().Value); }
+                        else if (c.Nombre == header) { values.Add(header, (c.Operador == Constantes.MenorIgual) ? 1 : (c.Operador == Constantes.MayorIgual) ? -1 : 0); }
+                        else { values.Add(header, 0); }
+                    }
+
+                    standardConstraints.Add(new VectorEquation(c.Nombre, values, c.TerminoIndependiente));
+                }
+
+            }
+
+            return standardConstraints;
+        }
+
         public bool EstandarizarFuncionObjetivo(IEnumerable<StandardConstraint> restricciones, ref ObjectiveFunction fo)
         {
             bool siCorrecto = false;
@@ -109,10 +145,10 @@ namespace TODSLibreria.SimplexService
                 OperacionesVectoriales op = new OperacionesVectoriales();
                 List<VectorEquation> resultado = new List<VectorEquation>();
 
-                VectorEquation evreferencia = tabla.Restricciones.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
+                VectorEquation evreferencia = tabla.StandardConstraint.Where(r => r.Nombre == pivote.Key).FirstOrDefault();
                 evreferencia = new VectorEquation(evreferencia.Nombre, evreferencia.NombresVariables, op.OperacionV1parametro(evreferencia.CuerpoNum, "/", pivote.Value), evreferencia.TerminoIndependiente / pivote.Value);
 
-                foreach (VectorEquation ev in tabla.Restricciones)
+                foreach (VectorEquation ev in tabla.StandardConstraint)
                {
                     if(ev.Nombre == pivote.Key)
                     {
@@ -130,7 +166,7 @@ namespace TODSLibreria.SimplexService
                 ObjectiveFunction fo = new ObjectiveFunction(tabla.FuncionObjetivo.NombresVariables, op.OperacionV1parametroV2(tabla.FuncionObjetivo.CuerpoNum, "-", pivotefo, evreferencia.CuerpoNum), op.OperacionV1parametroV2(tabla.FuncionObjetivo.TerminoIndependiente, Constantes.Resta, pivotefo, evreferencia.TerminoIndependiente), tabla.FuncionObjetivo.SiMaximizar);
 
                 tabla.FuncionObjetivo = fo;
-                tabla.Restricciones = resultado;
+                tabla.StandardConstraint = resultado;
                 siCorrecto = ActualizarBaseTabla(ref tabla, evreferencia.Nombre, new KeyValuePair<string, double>(variableMinima,evreferencia.TerminoIndependiente));
 
             }
@@ -177,7 +213,7 @@ namespace TODSLibreria.SimplexService
             if (tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MaxValue;
             else if (!tabla.FuncionObjetivo.SiMaximizar) valorCompareIteracion = double.MinValue;
 
-            foreach (VectorEquation ev in tabla.Restricciones)
+            foreach (VectorEquation ev in tabla.StandardConstraint)
             {
                 double iteracionN = ev.CuerpoVector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
                 string iteracionS = !string.IsNullOrEmpty(ev.Nombre) ? ev.Nombre : string.Empty;

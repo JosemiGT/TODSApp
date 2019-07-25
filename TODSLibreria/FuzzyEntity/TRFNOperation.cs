@@ -26,6 +26,11 @@ namespace TODSLibreria.FuzzyEntity
             return new TRFN(Constantes.NDType.AlfaBetaType, opn.Media(N1.L, N1.U)*opn.Media(N2.L, N2.U) - t, opn.Media(N1.L, N1.U) * opn.Media(N2.L, N2.U) + t, opn.ValorAbsoluto(ab), opn.ValorAbsoluto(ab));
         }
 
+        public TRFN MakeNegative(TRFN N)
+        {
+            return (N != null) ? new TRFN(Constantes.NDType.AlfaBetaType, -N.U, -N.L, N.Alfa, N.Beta) : null;
+        }
+
         public bool IsEquivalent(TRFN N1, TRFN N2)
         {
             return ((N1.L + N1.U) / 2 == (N2.L + N2.U) / 2);
@@ -35,5 +40,6 @@ namespace TODSLibreria.FuzzyEntity
         {
             return new double[4] { N1.L + N2.L, N1.L + N2.U, N1.U + N2.L, N1.U + N2.U };
         }
+
     }
 }

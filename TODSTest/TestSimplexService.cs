@@ -20,8 +20,8 @@ namespace TODSTest
         public static readonly List<double> vec1 = new List<double> { 6, 4 };
         public static readonly List<double> vec2 = new List<double> { 1, 1 };
 
-        public static readonly Constraint r1 = new Constraint(cab, vec1, menorIgual, termIndepe1);
-        public static readonly Constraint r2 = new Constraint(cab, vec2, mayorIgual, termIndepe2);
+        public static readonly Constraint r1 = new Constraint("S1",cab, vec1, menorIgual, termIndepe1);
+        public static readonly Constraint r2 = new Constraint("S2", cab, vec2, mayorIgual, termIndepe2);
 
         public static readonly List<Constraint> restricciones = new List<Constraint> { r1, r2 };
         public const double termIndepe1 = 24;
