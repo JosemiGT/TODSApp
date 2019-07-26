@@ -75,7 +75,7 @@ namespace TODSLibreria.FuzzySimplexService
         public bool Pivoting(ref FuzzyTableau tableau, out KeyValuePair<string, double> minVar, out KeyValuePair<string, double> pivot)
         {
             bool isCorrect = false;
-            minVar = new KeyValuePair<string, double>();
+            minVar = new KeyValuePair<string, double>("", 0);
             pivot = new KeyValuePair<string, double>();
 
             VectorEquation Zrow = tableau.ZRow;
@@ -84,13 +84,35 @@ namespace TODSLibreria.FuzzySimplexService
             {
                 foreach (KeyValuePair<string, double> kv in tableau.ZRow.CuerpoVector)
                 {
-                    //if (tableau.Ob.SiMaximizar && kv.Value < variableMinima.Value) variableMinima = kv;
+                    if (tableau.FuzzyZRow.IsMax && kv.Value < minVar.Value) minVar = kv;
                 }
 
-                //pivot = ObtenerPivote(variableMinima, ref tableau);
+                pivot = GetPivot(minVar, ref tableau);
                 isCorrect = true;
             }
             return isCorrect;
         }
+
+        private KeyValuePair<string, double> GetPivot(KeyValuePair<string, double> variableMinima, ref FuzzyTableau tabla)
+        {
+
+            double valorCompareIteracion = new double();
+            string restriccionS = string.Empty;
+            double pivoteValor = double.NaN;
+
+            if (tabla.FuzzyZRow.IsMax) valorCompareIteracion = double.MaxValue;
+            else if (!tabla.FuzzyZRow.IsMax) valorCompareIteracion = double.MinValue;
+
+            foreach (FuzzyVectorEquation ev in tabla.FuzzyStandardConstraint)
+            {
+                double iteracionN = ev.Vector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
+                string iteracionS = !string.IsNullOrEmpty(ev.Name) ? ev.Name : string.Empty;
+                if (tabla.FuzzyZRow.IsMax && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) < valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
+                else if (!tabla.FuzzyZRow.IsMax && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) > valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
+            }
+
+            return new KeyValuePair<string, double>(restriccionS, pivoteValor);
+        }
+
     }
 }

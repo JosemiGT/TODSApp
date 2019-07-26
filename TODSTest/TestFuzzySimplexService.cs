@@ -20,7 +20,7 @@ namespace TODSTest
                                                                 new TRFN(Constantes.NDType.AlfaBetaType, 15, 17, 2, 2) };
         
         public static readonly List<double> vec1 = new List<double> { 12, 13, 12 };
-        public static readonly List<double> vec2 = new List<double> { 14, 0, 12 };
+        public static readonly List<double> vec2 = new List<double> { 14, 0, 13 };
         public static readonly List<double> vec3 = new List<double> { 12, 15, 0 };
         public static readonly TRFN termIndepe1 = new TRFN(Constantes.NDType.AlfaBetaType, 475, 505, 6, 6);
         public static readonly TRFN termIndepe2 = new TRFN(Constantes.NDType.AlfaBetaType, 460, 480, 8, 8);
@@ -42,6 +42,11 @@ namespace TODSTest
             FuzzyObjectiveFunction fo = new FuzzyObjectiveFunction(cab, foNum, new TRFN(0), true);
 
             bool isCorrect = service.StandardizeObjectiveFunction(constraints, ref fo);
+
+            FuzzyTableau tableau = new FuzzyTableau(constraints, fo);
+
+            isCorrect = service.Pivoting(ref tableau, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
+
         }
     }
 }
