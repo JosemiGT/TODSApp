@@ -46,6 +46,7 @@ namespace TODSTest
             FuzzyTableau tableau = new FuzzyTableau(constraints, fo);
 
             isCorrect = service.Pivoting(ref tableau, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
+            isCorrect = service.ReduceColumns(ref tableau, pivote, variableMinima.Key);
 
         }
     }

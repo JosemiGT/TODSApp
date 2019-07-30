@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using TODSLibreria.FuzzyEntity;
 using TODSLibreria.FuzzySimplexEntity;
 using TODSLibreria.SimplexEntity;
+using TODSLibreria.SimplexService;
 
 namespace TODSLibreria.FuzzySimplexService
 {
@@ -112,6 +113,48 @@ namespace TODSLibreria.FuzzySimplexService
             }
 
             return new KeyValuePair<string, double>(restriccionS, pivoteValor);
+        }
+
+        public bool ReduceColumns(ref FuzzyTableau tableau, KeyValuePair<string, double> pivot, string minVar)
+        {
+            bool siCorrecto = false;
+
+            if (tableau != null && !string.IsNullOrEmpty(pivot.Key) && !string.IsNullOrEmpty(minVar))
+            {
+
+                OperacionesVectoriales op = new OperacionesVectoriales();
+                TRFNOperation fop = new TRFNOperation();
+                List<FuzzyVectorEquation> resultado = new List<FuzzyVectorEquation>();
+
+                FuzzyVectorEquation evreferencia = tableau.FuzzyStandardConstraint.Where(r => r.Name == pivot.Key).FirstOrDefault();
+                evreferencia = new FuzzyVectorEquation(evreferencia.Name, evreferencia.Header, op.OperacionV1parametro(evreferencia.Numbers, "/", pivot.Value), fop.OperateConstant(evreferencia.IndependentTerm,Constantes.Division, pivot.Value));
+
+                foreach (FuzzyVectorEquation ev in tableau.FuzzyStandardConstraint)
+                {
+                    if (ev.Name == pivot.Key)
+                    {
+                        resultado.Add(evreferencia);
+                    }
+                    else if (ev.Name != pivot.Key)
+                    {
+                        double pivoteev = ev.Vector.Where(r => r.Key == minVar).FirstOrDefault().Value;
+                        resultado.Add(new FuzzyVectorEquation(ev.Name, ev.Header, op.OperacionV1parametroV2(ev.Numbers, "-", pivoteev, evreferencia.Numbers), fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm,Constantes.Multiplicacion, pivoteev))));
+                    }
+
+                }
+
+                double pivotefo = tableau.ZRow.CuerpoVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
+                FuzzyObjectiveFunction fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.Operate(tableau.FuzzyZRow.FuzzyNums, Constantes.Resta, fop.OperateConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Subtraction(tableau.FuzzyZRow.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivotefo)), tableau.FuzzyZRow.IsMax);
+
+                //tableau.FuncionObjetivo = fo;
+                //tableau.Fu = resultado;
+                //siCorrecto = ActualizarBaseTabla(ref tableau, evreferencia.Nombre, new KeyValuePair<string, double>(minVar, evreferencia.TerminoIndependiente));
+
+                tableau = new FuzzyTableau(resultado, fo);
+
+            }
+
+            return siCorrecto;
         }
 
     }

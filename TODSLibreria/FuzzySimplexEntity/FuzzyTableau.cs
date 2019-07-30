@@ -15,7 +15,7 @@ namespace TODSLibreria.FuzzySimplexEntity
         public IEnumerable<VectorEquation> StandardConstraint { get; set; }
         public IEnumerable<FuzzyVectorEquation> FuzzyStandardConstraint { get; set; }
         public IDictionary<string, TRFN> RHS { get { return FuzzyStandardConstraint.Select(c => c.Name).Zip(FuzzyStandardConstraint.Select(c => c.IndependentTerm), (n, t) => new { n, t }).ToDictionary(x => x.n, x => x.t); } }
-        public VectorEquation RColumn { get { return new VectorEquation("Z", RHS.Select(f => f.Key), RHS.Select(f => f.Value.U + f.Value.L), 0); } }
+        public VectorEquation RColumn { get { return new VectorEquation("R", RHS.Select(f => f.Key), RHS.Select(f => f.Value.U + f.Value.L), 0); } }
 
         public FuzzyTableau(IEnumerable<VectorEquation> standardConstraint, FuzzyObjectiveFunction fo)
         {
