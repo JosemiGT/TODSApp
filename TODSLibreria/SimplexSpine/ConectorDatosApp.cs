@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TODSLibreria.FuzzyEntity;
+using TODSLibreria.FuzzySimplexEntity;
+using TODSLibreria.FuzzySimplexService;
 using TODSLibreria.ODatosExcel;
 using TODSLibreria.SimplexEntity;
 using TODSLibreria.SimplexService;
@@ -115,6 +118,99 @@ namespace TODSLibreria.SimplexSpine
             }
 
             return ecuaciones;
+        }
+
+        public bool GetFuzzyDataSimplex(string path, string NombreHoja, out FuzzyTableau tableau)
+        {
+            bool isCorrect = false;
+            tableau = null;
+            List<string> cabeceraFila = new List<string>();
+            List<string> cabeceraColumna = new List<string>();
+
+            if(!string.IsNullOrWhiteSpace(path) && !string.IsNullOrWhiteSpace(NombreHoja))
+            {
+                UsoExcel helperExcel = new UsoExcel(path);
+                FuzzyPrimalSimplexService fpsService = new FuzzyPrimalSimplexService();
+
+                if (helperExcel.SiProcesoCorrecto && helperExcel.ComprobarSiExisteHoja(NombreHoja, out int indiceHoja) &&
+                    helperExcel.ObtenerDimensionesHoja(indiceHoja, out int countFila, out int countCol))
+                {
+                    string[,] data = helperExcel.ObtenerDatosHoja(NombreHoja);
+                    if(GetEquations(data, countFila - 1, countCol - 1, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction) && fuzzyEquations.Count > 0)
+                    {
+                        List<FuzzyVectorEquation> constraints = fpsService.StandardizeConstraints(fuzzyEquations).ToList();
+                        if(fpsService.StandardizeObjectiveFunction(fuzzyEquations, ref fuzzyObjectiveFunction)) tableau = new FuzzyTableau(constraints, fuzzyObjectiveFunction); isCorrect = true;
+                    }
+                }
+            }
+
+            return isCorrect;
+        }
+
+        public bool GetEquations(string[,] data, int numRow, int numCol, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction)
+        {
+            equations = new List<Constraint>();
+            fuzzyEquations = new List<FuzzyConstraint>();
+            header = new List<string>();
+            fuzzyObjectiveFunction = null;
+            objectiveFunction = null;
+
+            if (data != null && !Decimal.TryParse(data[0, 0], out decimal num))
+            {
+                for (int i = 0; i < numRow; i++)
+                {
+                    bool ifPassOperator = false;
+                    bool isMax = false;
+                    string nameEV = string.Empty;
+                    string op = string.Empty;
+                    List<double> valuesN = new List<double>();
+                    List<TRFN> valuesFuzzy = new List<TRFN>();
+                    double terminoIndepe = Double.NaN;
+                    TRFN fuzzyIndependtTerm = null;
+
+                    if (i == 0)
+                    {
+                        for (int j = 1; j < numCol; j++)
+                        {
+                            header.Add(data[i, j]);
+                        }
+                    }
+                    else
+                    {
+                        for (int j = 0; j < numCol; j++)
+                        {
+                            double numA = Double.NaN;
+                            TRFN numT = null;
+                            if (j == 0) { nameEV = data[i, j]; }
+                            else if (Double.TryParse(data[i, j], out numA) && !ifPassOperator) { valuesN.Add(numA); }
+                            else if (!Double.TryParse(data[i, j], out numA) && !ifPassOperator) { op = data[i, j]; ifPassOperator = true; }
+                            else if (Double.TryParse(data[i, j], out numA) && ifPassOperator) { terminoIndepe = numA; }
+                            else if (!Double.TryParse(data[i, j], out numA) && ifPassOperator) { if (data[i, j] == Constantes.Maximizar) isMax = true; }
+                            else if (GetFuzzyNumber(data[i, j], out numT) && !ifPassOperator) { valuesFuzzy.Add(numT); }
+                            else if (GetFuzzyNumber(data[i, j], out numT) && ifPassOperator) { fuzzyIndependtTerm = numT; }
+                        }
+
+                        if (op != Constantes.IgualQue && fuzzyIndependtTerm == null) { equations.Add(new Constraint(nameEV, header, valuesN, op, terminoIndepe)); }
+                        if (op != Constantes.IgualQue && fuzzyIndependtTerm != null && valuesFuzzy.Count == 0) { fuzzyEquations.Add(new FuzzyConstraint(nameEV, header, valuesN, op, fuzzyIndependtTerm)); }
+                        if (op != Constantes.IgualQue && fuzzyIndependtTerm != null && valuesFuzzy.Count > 0) { fuzzyEquations.Add(new FuzzyConstraint(nameEV, header, valuesFuzzy, op, fuzzyIndependtTerm)); }
+                        else if (op == Constantes.IgualQue && valuesFuzzy.Count == 0) { objectiveFunction = new ObjectiveFunction(header, valuesN, isMax); }
+                        else if (op == Constantes.IgualQue && valuesFuzzy.Count > 0) { fuzzyObjectiveFunction = new FuzzyObjectiveFunction(header, valuesFuzzy, new TRFN(0), isMax); }
+                    }
+                }
+            }
+
+            return ((header.Count > 0 && fuzzyEquations.Count > 0 && fuzzyObjectiveFunction != null) || (header.Count > 0 && equations.Count > 0 && objectiveFunction != null));
+        }
+
+        private bool GetFuzzyNumber(string data, out TRFN FuzzyNumber)
+        {
+            bool isCorrect = false;
+            FuzzyNumber = null;
+            string[] numbers = data.Split(Constantes.Separator);
+
+            if(numbers.Length == 4 && double.TryParse(numbers[0], out double L) && double.TryParse(numbers[1], out double U) && double.TryParse(numbers[2], out double alfa) && double.TryParse(numbers[3], out double beta)) FuzzyNumber = new TRFN(Constantes.NDType.AlfaBetaType, L, U, alfa, beta); isCorrect = true;
+
+            return isCorrect;
         }
     }
 }

@@ -157,5 +157,18 @@ namespace TODSLibreria.FuzzySimplexService
             return siCorrecto;
         }
 
+        public bool CheckEnd(FuzzyTableau tableau)
+        {
+            bool isEnd = false;
+
+            if (tableau != null && tableau.FuzzyZRow != null)
+            {
+                isEnd = tableau.NotSolution || (!tableau.ZRow.CuerpoNum.Any(n => n < 0) && tableau.ZRow.TerminoIndependiente > 0);
+            }
+
+            return isEnd;
+
+        }
+
     }
 }

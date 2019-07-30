@@ -64,6 +64,7 @@
     <Compile Include="SimplexSpine\ConectorDatosApp.cs" />
     <Compile Include="SimplexSpine\ServicioTraza.cs" />
     <Compile Include="SimplexSpine\SimplexSpine.cs" />
+    <Compile Include="SimplexSpine\SimplexSpineLogic.cs" />
   </ItemGroup>
   <ItemGroup>
     <COMReference Include="Microsoft.Office.Core">

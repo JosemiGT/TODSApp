@@ -11,8 +11,12 @@ namespace TODSLibreria
         public const string ResultadoTxt = @"\Resultado_";
         public const string ExtensionTxt = ".txt";
 
+        //Tipos de problemas
+        public const string BasicSimplex = "BasicSimplex";
+        public const string FuzzyPrimalSimplex = "FuzzyPrimalSimplex";
+
         //Utilidades para lógicas
-        public static readonly char[] Separadores = { ',', ';', '/' };
+        public static readonly char[] Separator = { ',', ';', '/' };
         public static readonly string[] Operadores = { "<", "<=", "=", ">=", ">=", };
         public const string Suma = "+";
         public const string Resta = "-";

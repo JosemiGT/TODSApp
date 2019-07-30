@@ -69,8 +69,8 @@ namespace TODSTest
         {
             string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
 
-            SimplexSpine simplex = new SimplexSpine(path);
-            simplex.Ejecutar("Test");
+            SimplexSpineLogic simplex = new SimplexSpineLogic(path);
+            simplex.EjecutarBasicSimplex("Test");
         }
     }
 }
