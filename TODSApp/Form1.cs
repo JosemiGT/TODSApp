@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using TODSLibreria.ODatosExcel;
+using TODSLibreria.SimplexSpine;
 
 namespace TODSApp
 {
@@ -21,6 +22,8 @@ namespace TODSApp
         {
             InitializeComponent();
             ajustesForm = new FormAjustes(this);
+            ajustesForm.Left = this.Left;
+            ajustesForm.Top = this.Top;
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -63,9 +66,18 @@ namespace TODSApp
 
         }
 
-        private void BotonEjecutar_Click(object sender, EventArgs e)
+        private async void BotonEjecutar_Click(object sender, EventArgs e)
         {
+            SimplexSpine spine = new SimplexSpine(PathBox.Text);
 
+            if (siDatos.Checked && ajustesForm.config.DataType == Config.EDataType.XLS)
+            {
+               // Task simplexTask = new Task(spine.ExecuteSimplexSpine(ajustesForm.config.Solver.ToString(), ajustesForm.config.ProblemName));
+
+                
+            }
+            else if (siDatos.Checked && ajustesForm.config.DataType == Config.EDataType.CSV) MessageBox.Show("En la versión actual no está disponible lectura de archivos CSV", "No disponible", MessageBoxButtons.OK);
+            else MessageBox.Show("Requiere comprobar los datos previamente", "Acción necesaria", MessageBoxButtons.OK);
         }
 
         private void pictureBox2_Click(object sender, EventArgs e)
@@ -91,34 +103,12 @@ namespace TODSApp
                 try
                 {
                     UsoExcel excel = new UsoExcel(PathBox.Text);
-
-                    bool siExiste = excel.ComprobarSiExisteHoja("Datos", out int indiceHoja);
-
-                    if (siExiste)
-                    {
-                        string message = "Los datos introducidos tienen formato de pestañas adecuado.";
-                        string caption = "Comprobación de formato de datos";
-                        siDatos.Checked = true;
-                        MessageBoxButtons botonOK = MessageBoxButtons.OK;
-
-                        var result = MessageBox.Show(message, caption, botonOK);
-                    }
-                    else
-                    {
-                        string message = "Error en la comprobación de datos.";
-                        string caption = "Comprobación de formato de datos";
-                        MessageBoxButtons botonOK = MessageBoxButtons.OK;
-
-                        var result = MessageBox.Show(message, caption, botonOK);
-                    }
+                    if (excel.ComprobarSiExisteHoja(ajustesForm.config.ProblemName, out int indiceHoja)) { MessageBox.Show(Config.dataMessageCheckOk, Config.dataTittleCheck, MessageBoxButtons.OK); siDatos.Checked = true; }
+                    else MessageBox.Show(Config.dataMessageCheckNoOk, Config.dataTittleCheck, MessageBoxButtons.OK);
                 }
                 catch (Exception ex)
                 {
-                    string message = ex.Message;
-                    string caption = "Comprobación de formato de datos";
-                    MessageBoxButtons botonOK = MessageBoxButtons.OK;
-
-                    var result = MessageBox.Show(message, caption, botonOK);
+                    MessageBox.Show(ex.Message, Config.dataTittleCheck, MessageBoxButtons.OK);
                 }
             }
         }

@@ -15,20 +15,20 @@ namespace TODSApp
         private MainForm mainForm { get; set; }
         public int posX { get; set; }
         public int posY { get; set; }
+        public Config config { get; set; }
 
         public FormAjustes(MainForm _mainForm)
         {
             InitializeComponent();
             mainForm = _mainForm;
-            this.Left = mainForm.Left;
-            this.Top = mainForm.Top;
+            config = new Config();
+            GetParameterFile();
         }
 
         private void buttonConfig_Click(object sender, EventArgs e)
         {
             this.Hide();
             mainForm.Show();
-
         }
 
         private void buttonClose_Click(object sender, EventArgs e)
@@ -60,7 +60,41 @@ namespace TODSApp
 
         private void BotonCambios_Click(object sender, EventArgs e)
         {
+            if (CheckParameter()) { SetParameterFile(); if (config.WriteConfig()) MessageBox.Show(Config.CorrectConfifMessage, Config.CorrectConfif, MessageBoxButtons.OK); }
+            else MessageBox.Show(Config.IncorrectConfifMessage, Config.IncorrectConfif, MessageBoxButtons.OK);
+        }
 
+        private void GetParameterFile()
+        {
+            if(config.NumberType != null && config.NumberType == Config.ENumberType.Real)  this.listBoxTipoNumeros.SelectedItem = this.listBoxTipoNumeros.Items[0]; 
+            else if(config.NumberType != null && config.NumberType == Config.ENumberType.FuzzyTrap)  this.listBoxTipoNumeros.SelectedItem = this.listBoxTipoNumeros.Items[1]; 
+
+            if(config.DataType != null && config.DataType == Config.EDataType.XLS)  this.listBoxFormatoDatos.SelectedItem = this.listBoxFormatoDatos.Items[0];
+            else if(config.DataType != null && config.DataType == Config.EDataType.CSV)  this.listBoxFormatoDatos.SelectedItem = this.listBoxFormatoDatos.Items[1];
+
+            if (config.Solver != null && config.Solver == Config.ESolver.Simplex)  this.listBoxSolver.SelectedItem = this.listBoxSolver.Items[0];
+            else if (config.Solver != null && config.Solver == Config.ESolver.FSP)  this.listBoxSolver.SelectedItem = this.listBoxSolver.Items[1];
+
+            if (!string.IsNullOrEmpty(config.ProblemName)) this.textBoxProblemName.Text = config.ProblemName;
+        }
+
+        private void SetParameterFile()
+        {
+            if (this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[0]) config.NumberType = Config.ENumberType.Real;
+            else if (this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[1]) config.NumberType = Config.ENumberType.FuzzyTrap;
+
+            if (this.listBoxFormatoDatos.SelectedItem == this.listBoxFormatoDatos.Items[0]) config.DataType = Config.EDataType.XLS;
+            else if (this.listBoxFormatoDatos.SelectedItem == this.listBoxFormatoDatos.Items[1]) config.DataType = Config.EDataType.CSV;
+
+            if (this.listBoxSolver.SelectedItem == this.listBoxSolver.Items[0]) config.Solver = Config.ESolver.Simplex;
+            else if (this.listBoxSolver.SelectedItem == this.listBoxSolver.Items[1]) config.Solver = Config.ESolver.FSP;
+
+            if (!string.IsNullOrEmpty(this.textBoxProblemName.Text)) config.ProblemName = this.textBoxProblemName.Text;
+        }
+
+        private bool CheckParameter()
+        {
+            return ((this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[0] && this.listBoxSolver.SelectedItem == this.listBoxSolver.Items[0]) || (this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[1] && this.listBoxSolver.SelectedItem != this.listBoxSolver.Items[0]));
         }
     }
 }

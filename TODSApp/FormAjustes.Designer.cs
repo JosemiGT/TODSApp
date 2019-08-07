@@ -38,14 +38,16 @@
             this.labelInformacion = new System.Windows.Forms.Label();
             this.InformacionBox = new System.Windows.Forms.RichTextBox();
             this.labelDatos = new System.Windows.Forms.Label();
-            this.listBoxTipoProblema = new System.Windows.Forms.ListBox();
+            this.listBoxTipoNumeros = new System.Windows.Forms.ListBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.listBox1 = new System.Windows.Forms.ListBox();
+            this.listBoxFormatoDatos = new System.Windows.Forms.ListBox();
             this.BotonCambios = new System.Windows.Forms.Button();
-            this.listBox2 = new System.Windows.Forms.ListBox();
+            this.listBoxSolver = new System.Windows.Forms.ListBox();
             this.labelTipoProblema = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.label4 = new System.Windows.Forms.Label();
+            this.textBoxProblemName = new System.Windows.Forms.TextBox();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
@@ -184,22 +186,22 @@
             this.labelDatos.TabIndex = 13;
             this.labelDatos.Text = "Tipo de números:";
             // 
-            // listBoxTipoProblema
+            // listBoxTipoNumeros
             // 
-            this.listBoxTipoProblema.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.listBoxTipoProblema.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxTipoProblema.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxTipoProblema.ForeColor = System.Drawing.Color.White;
-            this.listBoxTipoProblema.FormattingEnabled = true;
-            this.listBoxTipoProblema.ItemHeight = 29;
-            this.listBoxTipoProblema.Items.AddRange(new object[] {
+            this.listBoxTipoNumeros.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.listBoxTipoNumeros.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxTipoNumeros.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBoxTipoNumeros.ForeColor = System.Drawing.Color.White;
+            this.listBoxTipoNumeros.FormattingEnabled = true;
+            this.listBoxTipoNumeros.ItemHeight = 29;
+            this.listBoxTipoNumeros.Items.AddRange(new object[] {
             "Reales",
             "Trapezoidales Difusos"});
-            this.listBoxTipoProblema.Location = new System.Drawing.Point(361, 209);
-            this.listBoxTipoProblema.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBoxTipoProblema.Name = "listBoxTipoProblema";
-            this.listBoxTipoProblema.Size = new System.Drawing.Size(310, 29);
-            this.listBoxTipoProblema.TabIndex = 19;
+            this.listBoxTipoNumeros.Location = new System.Drawing.Point(361, 209);
+            this.listBoxTipoNumeros.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listBoxTipoNumeros.Name = "listBoxTipoNumeros";
+            this.listBoxTipoNumeros.Size = new System.Drawing.Size(310, 29);
+            this.listBoxTipoNumeros.TabIndex = 19;
             // 
             // label3
             // 
@@ -213,22 +215,22 @@
             this.label3.TabIndex = 20;
             this.label3.Text = "Formato datos:";
             // 
-            // listBox1
+            // listBoxFormatoDatos
             // 
-            this.listBox1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.listBox1.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBox1.ForeColor = System.Drawing.Color.White;
-            this.listBox1.FormattingEnabled = true;
-            this.listBox1.ItemHeight = 29;
-            this.listBox1.Items.AddRange(new object[] {
+            this.listBoxFormatoDatos.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.listBoxFormatoDatos.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxFormatoDatos.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBoxFormatoDatos.ForeColor = System.Drawing.Color.White;
+            this.listBoxFormatoDatos.FormattingEnabled = true;
+            this.listBoxFormatoDatos.ItemHeight = 29;
+            this.listBoxFormatoDatos.Items.AddRange(new object[] {
             ".xmls",
             "CSV"});
-            this.listBox1.Location = new System.Drawing.Point(361, 294);
-            this.listBox1.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBox1.Name = "listBox1";
-            this.listBox1.Size = new System.Drawing.Size(310, 29);
-            this.listBox1.TabIndex = 21;
+            this.listBoxFormatoDatos.Location = new System.Drawing.Point(361, 294);
+            this.listBoxFormatoDatos.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listBoxFormatoDatos.Name = "listBoxFormatoDatos";
+            this.listBoxFormatoDatos.Size = new System.Drawing.Size(310, 29);
+            this.listBoxFormatoDatos.TabIndex = 21;
             // 
             // BotonCambios
             // 
@@ -247,22 +249,22 @@
             this.BotonCambios.UseVisualStyleBackColor = false;
             this.BotonCambios.Click += new System.EventHandler(this.BotonCambios_Click);
             // 
-            // listBox2
+            // listBoxSolver
             // 
-            this.listBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.listBox2.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBox2.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBox2.ForeColor = System.Drawing.Color.White;
-            this.listBox2.FormattingEnabled = true;
-            this.listBox2.ItemHeight = 29;
-            this.listBox2.Items.AddRange(new object[] {
-            "Algoritmo Simplex Primal",
-            "Algortirmo Simplex Revisado"});
-            this.listBox2.Location = new System.Drawing.Point(361, 445);
-            this.listBox2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBox2.Name = "listBox2";
-            this.listBox2.Size = new System.Drawing.Size(310, 29);
-            this.listBox2.TabIndex = 25;
+            this.listBoxSolver.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.listBoxSolver.BorderStyle = System.Windows.Forms.BorderStyle.None;
+            this.listBoxSolver.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.listBoxSolver.ForeColor = System.Drawing.Color.White;
+            this.listBoxSolver.FormattingEnabled = true;
+            this.listBoxSolver.ItemHeight = 29;
+            this.listBoxSolver.Items.AddRange(new object[] {
+            "Algoritmo Simplex Real",
+            "Algoritmo Simplex Primal Difuso"});
+            this.listBoxSolver.Location = new System.Drawing.Point(286, 445);
+            this.listBoxSolver.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
+            this.listBoxSolver.Name = "listBoxSolver";
+            this.listBoxSolver.Size = new System.Drawing.Size(385, 29);
+            this.listBoxSolver.TabIndex = 25;
             // 
             // labelTipoProblema
             // 
@@ -298,21 +300,44 @@
             this.pictureBox2.TabIndex = 27;
             this.pictureBox2.TabStop = false;
             // 
+            // label4
+            // 
+            this.label4.AutoSize = true;
+            this.label4.Font = new System.Drawing.Font("Arial Narrow", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label4.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.label4.Location = new System.Drawing.Point(132, 368);
+            this.label4.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(258, 33);
+            this.label4.TabIndex = 28;
+            this.label4.Text = "Nombre del problema:";
+            // 
+            // textBoxProblemName
+            // 
+            this.textBoxProblemName.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold);
+            this.textBoxProblemName.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
+            this.textBoxProblemName.Location = new System.Drawing.Point(397, 375);
+            this.textBoxProblemName.Name = "textBoxProblemName";
+            this.textBoxProblemName.Size = new System.Drawing.Size(274, 35);
+            this.textBoxProblemName.TabIndex = 29;
+            // 
             // FormAjustes
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1368, 761);
+            this.Controls.Add(this.textBoxProblemName);
+            this.Controls.Add(this.label4);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.listBox2);
+            this.Controls.Add(this.listBoxSolver);
             this.Controls.Add(this.labelTipoProblema);
             this.Controls.Add(this.BotonCambios);
-            this.Controls.Add(this.listBox1);
+            this.Controls.Add(this.listBoxFormatoDatos);
             this.Controls.Add(this.label3);
-            this.Controls.Add(this.listBoxTipoProblema);
+            this.Controls.Add(this.listBoxTipoNumeros);
             this.Controls.Add(this.labelDatos);
             this.Controls.Add(this.panel2);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;
@@ -341,13 +366,15 @@
         private System.Windows.Forms.Label labelInformacion;
         private System.Windows.Forms.RichTextBox InformacionBox;
         private System.Windows.Forms.Label labelDatos;
-        private System.Windows.Forms.ListBox listBoxTipoProblema;
+        private System.Windows.Forms.ListBox listBoxTipoNumeros;
         private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ListBox listBox1;
+        private System.Windows.Forms.ListBox listBoxFormatoDatos;
         private System.Windows.Forms.Button BotonCambios;
-        private System.Windows.Forms.ListBox listBox2;
+        private System.Windows.Forms.ListBox listBoxSolver;
         private System.Windows.Forms.Label labelTipoProblema;
         private System.Windows.Forms.PictureBox pictureBox1;
         private System.Windows.Forms.PictureBox pictureBox2;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.TextBox textBoxProblemName;
     }
 }
