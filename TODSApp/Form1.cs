@@ -13,9 +13,14 @@ namespace TODSApp
 {
     public partial class MainForm : Form
     {
+        public int posX { get; set; }
+        public int posY { get; set; }
+        public FormAjustes ajustesForm { get; set; }
+
         public MainForm()
         {
             InitializeComponent();
+            ajustesForm = new FormAjustes(this);
         }
 
         private void panel1_Paint(object sender, PaintEventArgs e)
@@ -125,11 +130,10 @@ namespace TODSApp
 
         private void button1_Click(object sender, EventArgs e)
         {
+            ajustesForm.Close();
             this.Close();
         }
 
-        int posY = 0;
-        int posX = 0;
         private void panel1_MouseMove(object sender, MouseEventArgs e)
         {
             if(e.Button != MouseButtons.Left)
@@ -140,13 +144,16 @@ namespace TODSApp
             else
             {
                 Left = Left + (e.X - posX);
+                ajustesForm.Left = Left + (e.X - posX);
                 Top = Top + (e.Y - posY);
+                ajustesForm.Top = Top + (e.Y - posY);
             }
         }
 
         private void buttonConfig_Click(object sender, EventArgs e)
         {
-
+            ajustesForm.Show();
+            this.Hide();
         }
     }
 }

@@ -40,13 +40,11 @@
             this.PathBox = new System.Windows.Forms.TextBox();
             this.BotonDatos = new System.Windows.Forms.Button();
             this.siDatos = new System.Windows.Forms.CheckBox();
-            this.labelTipoProblema = new System.Windows.Forms.Label();
-            this.listBoxTipoProblema = new System.Windows.Forms.ListBox();
             this.BotonEjecutar = new System.Windows.Forms.Button();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonConfig = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.buttonConfig = new System.Windows.Forms.Button();
-            this.buttonClose = new System.Windows.Forms.Button();
             this.panel1.SuspendLayout();
             this.panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
@@ -220,36 +218,6 @@
             this.siDatos.Text = "Datos comprobados";
             this.siDatos.UseVisualStyleBackColor = true;
             // 
-            // labelTipoProblema
-            // 
-            this.labelTipoProblema.AutoSize = true;
-            this.labelTipoProblema.Font = new System.Drawing.Font("Arial Narrow", 14F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelTipoProblema.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.labelTipoProblema.Location = new System.Drawing.Point(276, 416);
-            this.labelTipoProblema.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.labelTipoProblema.Name = "labelTipoProblema";
-            this.labelTipoProblema.Size = new System.Drawing.Size(93, 33);
-            this.labelTipoProblema.TabIndex = 17;
-            this.labelTipoProblema.Text = "Solver:";
-            // 
-            // listBoxTipoProblema
-            // 
-            this.listBoxTipoProblema.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.listBoxTipoProblema.BorderStyle = System.Windows.Forms.BorderStyle.None;
-            this.listBoxTipoProblema.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.listBoxTipoProblema.ForeColor = System.Drawing.Color.White;
-            this.listBoxTipoProblema.FormattingEnabled = true;
-            this.listBoxTipoProblema.ItemHeight = 29;
-            this.listBoxTipoProblema.Items.AddRange(new object[] {
-            "Algoritmo Simplex Primal",
-            "Algortirmo Simplex Revisado"});
-            this.listBoxTipoProblema.Location = new System.Drawing.Point(389, 416);
-            this.listBoxTipoProblema.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
-            this.listBoxTipoProblema.Name = "listBoxTipoProblema";
-            this.listBoxTipoProblema.Size = new System.Drawing.Size(310, 29);
-            this.listBoxTipoProblema.TabIndex = 18;
-            this.listBoxTipoProblema.SelectedIndexChanged += new System.EventHandler(this.listBoxTipoProblema_SelectedIndexChanged);
-            // 
             // BotonEjecutar
             // 
             this.BotonEjecutar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
@@ -266,6 +234,38 @@
             this.BotonEjecutar.Text = "Ejecutar programa";
             this.BotonEjecutar.UseVisualStyleBackColor = false;
             this.BotonEjecutar.Click += new System.EventHandler(this.BotonEjecutar_Click);
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
+            this.buttonClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonClose.FlatAppearance.BorderSize = 0;
+            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClose.Image = global::TODSApp.Properties.Resources.X1;
+            this.buttonClose.Location = new System.Drawing.Point(1277, 6);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(79, 74);
+            this.buttonClose.TabIndex = 5;
+            this.buttonClose.UseMnemonic = false;
+            this.buttonClose.UseVisualStyleBackColor = false;
+            this.buttonClose.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // buttonConfig
+            // 
+            this.buttonConfig.BackColor = System.Drawing.Color.Transparent;
+            this.buttonConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonConfig.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonConfig.FlatAppearance.BorderSize = 0;
+            this.buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConfig.Image = global::TODSApp.Properties.Resources.Configuracion;
+            this.buttonConfig.Location = new System.Drawing.Point(1015, 6);
+            this.buttonConfig.Name = "buttonConfig";
+            this.buttonConfig.Size = new System.Drawing.Size(77, 78);
+            this.buttonConfig.TabIndex = 6;
+            this.buttonConfig.UseMnemonic = false;
+            this.buttonConfig.UseVisualStyleBackColor = false;
+            this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
             // 
             // pictureBox2
             // 
@@ -291,38 +291,6 @@
             this.pictureBox1.TabStop = false;
             this.pictureBox1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
-            // buttonConfig
-            // 
-            this.buttonConfig.BackColor = System.Drawing.Color.Transparent;
-            this.buttonConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonConfig.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.buttonConfig.FlatAppearance.BorderSize = 0;
-            this.buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConfig.Image = global::TODSApp.Properties.Resources.Configuracion;
-            this.buttonConfig.Location = new System.Drawing.Point(1015, 6);
-            this.buttonConfig.Name = "buttonConfig";
-            this.buttonConfig.Size = new System.Drawing.Size(77, 78);
-            this.buttonConfig.TabIndex = 6;
-            this.buttonConfig.UseMnemonic = false;
-            this.buttonConfig.UseVisualStyleBackColor = false;
-            this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
-            // 
-            // buttonClose
-            // 
-            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
-            this.buttonClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.buttonClose.FlatAppearance.BorderSize = 0;
-            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Image = global::TODSApp.Properties.Resources.X1;
-            this.buttonClose.Location = new System.Drawing.Point(1277, 6);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(79, 74);
-            this.buttonClose.TabIndex = 5;
-            this.buttonClose.UseMnemonic = false;
-            this.buttonClose.UseVisualStyleBackColor = false;
-            this.buttonClose.Click += new System.EventHandler(this.button1_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
@@ -332,8 +300,6 @@
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.BotonEjecutar);
-            this.Controls.Add(this.listBoxTipoProblema);
-            this.Controls.Add(this.labelTipoProblema);
             this.Controls.Add(this.siDatos);
             this.Controls.Add(this.BotonDatos);
             this.Controls.Add(this.PathBox);
@@ -371,8 +337,6 @@
         private System.Windows.Forms.TextBox PathBox;
         private System.Windows.Forms.Button BotonDatos;
         private System.Windows.Forms.CheckBox siDatos;
-        private System.Windows.Forms.Label labelTipoProblema;
-        private System.Windows.Forms.ListBox listBoxTipoProblema;
         private System.Windows.Forms.Button BotonEjecutar;
         private System.Windows.Forms.PictureBox pictureBox2;
         private System.Windows.Forms.Button buttonClose;
