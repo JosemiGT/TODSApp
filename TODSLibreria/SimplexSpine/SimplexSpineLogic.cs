@@ -72,6 +72,7 @@ namespace TODSLibreria.SimplexSpine
                 Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
                 Trace.TrazaTexto(Constantes.TextoValor);
                 Trace.TrazaEcuacionVectorial(tableau.ZRow);
+                isCorrect = true;
 
             }
 

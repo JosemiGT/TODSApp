@@ -7,6 +7,7 @@ using TODSLibreria.FuzzyEntity;
 using TODSLibreria.FuzzySimplexEntity;
 using TODSLibreria.FuzzySimplexService;
 using TODSLibreria.SimplexEntity;
+using TODSLibreria.SimplexSpine;
 
 namespace TODSTest
 {
@@ -47,6 +48,53 @@ namespace TODSTest
 
             isCorrect = service.Pivoting(ref tableau, out KeyValuePair<string, double> variableMinima, out KeyValuePair<string, double> pivote);
             isCorrect = service.ReduceColumns(ref tableau, pivote, variableMinima.Key);
+
+        }
+
+        [TestMethod]
+        public void FuzzySimplexAnddata()
+        {
+            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
+            SimplexSpine spine = new SimplexSpine(path);
+
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
+        }
+
+        [TestMethod]
+        public void FuzzyOperationsBody()
+        {
+            TRFNOperation fop = new TRFNOperation();
+
+            List<TRFN> L1 = new List<TRFN> { new TRFN(Constantes.NDType.AlfaBetaType, -15, -13, 2, 2),
+                                             new TRFN(Constantes.NDType.AlfaBetaType, -14, -12, 3, 3),
+                                             new TRFN(Constantes.NDType.AlfaBetaType, -17, -15, 2, 2) };
+
+            List<double> L2 = new List<double> { 1.076923077, 0, 1, 0, 0.07692307692, 0 };
+
+            TRFN referencia = new TRFN(Constantes.NDType.AlfaBetaType, -17, -15, 2, 2);
+
+            List<TRFN> L3 = fop.OperateFuzzyConstant(L2, Constantes.Multiplicacion, referencia).ToList();
+
+            List<TRFN> result = fop.ReduceFuzzyColumns(L1, L3).ToList();
+
+
+
+        }
+
+        [TestMethod]
+        public void FuzzyOperationsFO()
+        {
+            TRFNOperation fop = new TRFNOperation();
+
+            TRFN n1 = new TRFN(Constantes.NDType.AlfaBetaType, 15, 17, 2, 2);
+            TRFN n2 = new TRFN(Constantes.NDType.AlfaBetaType, 460, 480, 8, 8);
+
+            n2 = fop.OperateConstant(n2, Constantes.Division, 13);
+            //n2 = fop.MakeNegative(n2);
+
+            TRFN result = fop.Multiplication(n1, n2);
+            //result = fop.OperateConstant(result, Constantes.Division, 13);
+            //result = fop.MakeNegative(result);
 
         }
     }

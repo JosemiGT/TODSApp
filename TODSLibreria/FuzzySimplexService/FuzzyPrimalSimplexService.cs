@@ -143,8 +143,8 @@ namespace TODSLibreria.FuzzySimplexService
 
                 }
 
-                double pivotefo = tableau.ZRow.CuerpoVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
-                FuzzyObjectiveFunction fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.Operate(tableau.FuzzyZRow.FuzzyNums, Constantes.Resta, fop.OperateConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Subtraction(tableau.FuzzyZRow.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivotefo)), tableau.FuzzyZRow.IsMax);
+                TRFN pivotefo = tableau.FuzzyZRow.FuzzyVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
+                FuzzyObjectiveFunction fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header,fop.ReduceFuzzyColumns(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo),evreferencia.IndependentTerm )), tableau.FuzzyZRow.IsMax);
 
                 //tableau.FuncionObjetivo = fo;
                 //tableau.Fu = resultado;

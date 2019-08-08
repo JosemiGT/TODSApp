@@ -22,7 +22,7 @@ namespace TODSLibreria.FuzzyEntity
         {
             OperacionesNumericas opn = new OperacionesNumericas();
             double t = (tmult(N1, N2).Max() - tmult(N1, N2).Min()) / 2;
-            double ab = (N1.U * N2.Alfa + N2.U * N2.Alfa);
+            double ab = opn.ValorAbsoluto((N1.U * N2.Alfa) + opn.ValorAbsoluto(N2.U * N1.Alfa));
             return new TRFN(Constantes.NDType.AlfaBetaType, opn.Media(N1.L, N1.U)*opn.Media(N2.L, N2.U) - t, opn.Media(N1.L, N1.U) * opn.Media(N2.L, N2.U) + t, opn.ValorAbsoluto(ab), opn.ValorAbsoluto(ab));
         }
 
@@ -41,6 +41,11 @@ namespace TODSLibreria.FuzzyEntity
                 case Constantes.Division: return (constant != 0) ? (new TRFN(Constantes.NDType.AlfaBetaType, N.L / constant, N.U / constant, N.Alfa / constant, N.Beta / constant)) : null; 
                 default: return null;
             }
+        }
+
+        public TRFN Rest(TRFN N1, TRFN N2)
+        {
+            return !(IsEquivalent(N1,N2)) ? Addition(N1, MakeNegative(N2)) : new TRFN(0);
         }
 
         public double OperateConstant(double n1, string op, double n2)
@@ -66,6 +71,11 @@ namespace TODSLibreria.FuzzyEntity
             return ListN.Select(x => OperateConstant(x, op, constant)).ToList();
         }
 
+        public IEnumerable<TRFN> OperateFuzzyConstant(IEnumerable<double> ListN, string op, TRFN constant)
+        {
+            return ListN.Select(x => OperateConstant(constant, op, x)).ToList();
+        }
+
         public IEnumerable<TRFN> Operate(IEnumerable<TRFN> ListN1, string op, IEnumerable<double> ListN2)
         {
             return ListN1.Zip(ListN2, (x, y) => OperateConstant(x, op, y));
@@ -81,10 +91,18 @@ namespace TODSLibreria.FuzzyEntity
             return ((N1.L + N1.U) / 2 == (N2.L + N2.U) / 2);
         }
 
+        public IEnumerable<TRFN> ReduceFuzzyColumns(IEnumerable<TRFN> Flist1, IEnumerable<TRFN> Flist2)
+        {
+            return Flist1.Zip(Flist2, (x, y) => Rest(x, y));
+        }
+
+
         private IEnumerable<double> tmult(TRFN N1, TRFN N2)
         {
-            return new double[4] { N1.L + N2.L, N1.L + N2.U, N1.U + N2.L, N1.U + N2.U };
+            return new double[4] { N1.L * N2.L, N1.L * N2.U, N1.U * N2.L, N1.U * N2.U };
         }
+
+        
 
     }
 }

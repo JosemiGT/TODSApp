@@ -181,11 +181,13 @@ namespace TODSLibreria.SimplexSpine
                         {
                             double numA = Double.NaN;
                             TRFN numT = null;
-                            if (j == 0) { nameEV = data[i, j]; }
+                            if (j == 0) {
+                                nameEV = data[i, j];
+                            }
                             else if (Double.TryParse(data[i, j], out numA) && !ifPassOperator) { valuesN.Add(numA); }
-                            else if (!Double.TryParse(data[i, j], out numA) && !ifPassOperator) { op = data[i, j]; ifPassOperator = true; }
+                            else if (!Double.TryParse(data[i, j], out numA) && !GetFuzzyNumber(data[i, j], out numT) && !ifPassOperator) { op = data[i, j]; ifPassOperator = true; }
                             else if (Double.TryParse(data[i, j], out numA) && ifPassOperator) { terminoIndepe = numA; }
-                            else if (!Double.TryParse(data[i, j], out numA) && ifPassOperator) { if (data[i, j] == Constantes.Maximizar) isMax = true; }
+                            else if (!Double.TryParse(data[i, j], out numA) && !GetFuzzyNumber(data[i, j], out numT) && ifPassOperator) { if (data[i, j] == Constantes.Maximizar) isMax = true; }
                             else if (GetFuzzyNumber(data[i, j], out numT) && !ifPassOperator) { valuesFuzzy.Add(numT); }
                             else if (GetFuzzyNumber(data[i, j], out numT) && ifPassOperator) { fuzzyIndependtTerm = numT; }
                         }
@@ -208,7 +210,7 @@ namespace TODSLibreria.SimplexSpine
             FuzzyNumber = null;
             string[] numbers = data.Split(Constantes.Separator);
 
-            if(numbers.Length == 4 && double.TryParse(numbers[0], out double L) && double.TryParse(numbers[1], out double U) && double.TryParse(numbers[2], out double alfa) && double.TryParse(numbers[3], out double beta)) FuzzyNumber = new TRFN(Constantes.NDType.AlfaBetaType, L, U, alfa, beta); isCorrect = true;
+            if (numbers.Length == 4 && double.TryParse(numbers[0], out double L) && double.TryParse(numbers[1], out double U) && double.TryParse(numbers[2], out double alfa) && double.TryParse(numbers[3], out double beta)) { FuzzyNumber = new TRFN(Constantes.NDType.AlfaBetaType, L, U, alfa, beta); isCorrect = true; }
 
             return isCorrect;
         }
