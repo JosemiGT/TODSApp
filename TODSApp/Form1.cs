@@ -17,11 +17,13 @@ namespace TODSApp
         public int posX { get; set; }
         public int posY { get; set; }
         public FormAjustes ajustesForm { get; set; }
+        public FormLoading loadingF { get; set; }
 
         public MainForm()
         {
             InitializeComponent();
             ajustesForm = new FormAjustes(this);
+            loadingF = new FormLoading();
             ajustesForm.Left = this.Left;
             ajustesForm.Top = this.Top;
         }
@@ -72,9 +74,16 @@ namespace TODSApp
 
             if (siDatos.Checked && ajustesForm.config.DataType == Config.EDataType.XLS)
             {
-               // Task simplexTask = new Task(spine.ExecuteSimplexSpine(ajustesForm.config.Solver.ToString(), ajustesForm.config.ProblemName));
+                Task simplexTask = new Task(() => spine.ExecuteSimplexSpine(ajustesForm.config.Solver.ToString(), ajustesForm.config.ProblemName));
+                simplexTask.Start();
+                loadingF.Top = this.Top;
+                loadingF.Left = this.Left;
+                loadingF.Show();
+                simplexTask.Wait();
+                loadingF.Hide();
+                MessageBox.Show("Ha finalizado el cálculo", "Proceso completado", MessageBoxButtons.OK);
 
-                
+
             }
             else if (siDatos.Checked && ajustesForm.config.DataType == Config.EDataType.CSV) MessageBox.Show("En la versión actual no está disponible lectura de archivos CSV", "No disponible", MessageBoxButtons.OK);
             else MessageBox.Show("Requiere comprobar los datos previamente", "Acción necesaria", MessageBoxButtons.OK);

@@ -26,7 +26,7 @@ namespace TODSApp
 
         public enum ENumberType { Real, FuzzyTrap}
         public enum EDataType { XLS, CSV }
-        public enum ESolver { Simplex, FSP }
+        public enum ESolver { BasicSimplex, FuzzyPrimalSimplex }
 
         public ENumberType? NumberType { get; set; }
         public EDataType? DataType { get; set; }
@@ -103,8 +103,8 @@ namespace TODSApp
                 if (line.Contains(DT) && line.Contains(EDataType.XLS.ToString())) { DataType = EDataType.XLS; }
                 else if (line.Contains(DT) && line.Contains(EDataType.CSV.ToString())) { DataType = EDataType.CSV; }
 
-                if (line.Contains(S) && line.Contains(ESolver.Simplex.ToString())) { Solver = ESolver.Simplex; }
-                else if (line.Contains(S) && line.Contains(ESolver.FSP.ToString())) { Solver = ESolver.FSP; }
+                if (line.Contains(S) && line.Contains(ESolver.BasicSimplex.ToString())) { Solver = ESolver.BasicSimplex; }
+                else if (line.Contains(S) && line.Contains(ESolver.FuzzyPrimalSimplex.ToString())) { Solver = ESolver.FuzzyPrimalSimplex; }
 
                 if (line.Contains(PN)) { ProblemName = line.Replace(PN, "").Replace(":", "").Replace(" ", ""); }
             }
@@ -118,7 +118,7 @@ namespace TODSApp
 
             NumberType = ENumberType.FuzzyTrap;
             DataType = EDataType.XLS;
-            Solver = ESolver.FSP;
+            Solver = ESolver.FuzzyPrimalSimplex;
             ProblemName = string.Empty;
 
             try
