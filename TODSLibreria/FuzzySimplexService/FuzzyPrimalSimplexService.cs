@@ -73,10 +73,10 @@ namespace TODSLibreria.FuzzySimplexService
             return isCorrect;
         }
 
-        public bool Pivoting(ref FuzzyTableau tableau, out KeyValuePair<string, double> minVar, out KeyValuePair<string, double> pivot)
+        public bool Pivoting(ref FuzzyTableau tableau, out KeyValuePair<string, double> refVar, out KeyValuePair<string, double> pivot)
         {
             bool isCorrect = false;
-            minVar = new KeyValuePair<string, double>("", 0);
+            refVar = new KeyValuePair<string, double>("", 0);
             pivot = new KeyValuePair<string, double>();
 
             VectorEquation Zrow = tableau.ZRow;
@@ -85,10 +85,11 @@ namespace TODSLibreria.FuzzySimplexService
             {
                 foreach (KeyValuePair<string, double> kv in tableau.ZRow.CuerpoVector)
                 {
-                    if (tableau.FuzzyZRow.IsMax && kv.Value < minVar.Value) minVar = kv;
+                    if (tableau.FuzzyZRow.IsMax && kv.Value < refVar.Value) refVar = kv;
+                    else if (!tableau.FuzzyZRow.IsMax && kv.Value > refVar.Value) refVar = kv;
                 }
 
-                pivot = GetPivot(minVar, ref tableau);
+                pivot = GetPivot(refVar, ref tableau);
                 isCorrect = true;
             }
             return isCorrect;

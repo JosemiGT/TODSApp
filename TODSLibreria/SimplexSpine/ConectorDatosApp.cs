@@ -139,7 +139,7 @@ namespace TODSLibreria.SimplexSpine
                     if(GetEquations(data, countFila - 1, countCol - 1, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction) && fuzzyEquations.Count > 0)
                     {
                         List<FuzzyVectorEquation> constraints = fpsService.StandardizeConstraints(fuzzyEquations).ToList();
-                        if(fpsService.StandardizeObjectiveFunction(fuzzyEquations, ref fuzzyObjectiveFunction)) tableau = new FuzzyTableau(constraints, fuzzyObjectiveFunction); isCorrect = true;
+                        if (fpsService.StandardizeObjectiveFunction(fuzzyEquations, ref fuzzyObjectiveFunction)) { tableau = new FuzzyTableau(constraints, fuzzyObjectiveFunction); isCorrect = true; }
                     }
                 }
             }

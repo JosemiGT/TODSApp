@@ -58,17 +58,21 @@ namespace TODSLibreria.SimplexSpine
             KeyValuePair<string, double> minVar = new KeyValuePair<string, double>();
             KeyValuePair<string, double> pivot = new KeyValuePair<string, double>();
 
+            //TODO: Necesario solución inicial con el método de los dos fases para verificar que el problema tiene solución.
+            //--> Revisar en artículo de fuzzy la última parte, hacer solución z = 0;
+
             if (!string.IsNullOrWhiteSpace(sheetName) && conector.GetFuzzyDataSimplex(Path,sheetName, out FuzzyTableau tableau))
             {
                 service.Pivoting(ref tableau, out minVar, out pivot);
                 service.ReduceColumns(ref tableau, pivot, minVar.Key);
 
-                while (!service.CheckEnd(tableau))
+                while (!service.CheckEnd(tableau)) //TODO: Revisar condiciones de parada --> z Positivo (max) o Negativo (min) && es variable no básica --> Se para.
                 {
                     service.Pivoting(ref tableau, out minVar, out pivot);
                     service.ReduceColumns(ref tableau, pivot, minVar.Key);
                 }
 
+                //TODO: La solución a pintar, no sería el z fuzzy tableau, si no que sería la base que se forme con la columna RFuzzy (terminos independiente), por lo que es necesario cambiar la interpretación de resultado.
                 Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
                 Trace.TrazaTexto(Constantes.TextoValor);
                 Trace.TrazaEcuacionVectorial(tableau.ZRow);
@@ -78,5 +82,7 @@ namespace TODSLibreria.SimplexSpine
 
             return isCorrect;
         }
+
+        //TODO: Hacer problema Dual para análisis de sensibilidades. (Execute FuzzyDualSimplex(); --> ¿Método padre para primal y dual y no tener que leer los datos dos veces?
     }
 }
