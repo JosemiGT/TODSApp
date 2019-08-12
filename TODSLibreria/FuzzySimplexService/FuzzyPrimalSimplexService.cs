@@ -147,15 +147,18 @@ namespace TODSLibreria.FuzzySimplexService
                 TRFN pivotefo = tableau.FuzzyZRow.FuzzyVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
                 FuzzyObjectiveFunction fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header,fop.ReduceFuzzyColumns(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo),evreferencia.IndependentTerm )), tableau.FuzzyZRow.IsMax);
 
-                //tableau.FuncionObjetivo = fo;
-                //tableau.Fu = resultado;
-                //siCorrecto = ActualizarBaseTabla(ref tableau, evreferencia.Nombre, new KeyValuePair<string, double>(minVar, evreferencia.TerminoIndependiente));
-
-                tableau = new FuzzyTableau(resultado, fo);
+                tableau = new FuzzyTableau(resultado, fo, RefreshBase(tableau.Base, minVar, pivot.Key));
 
             }
 
             return siCorrecto;
+        }
+
+        private IEnumerable<string> RefreshBase(IEnumerable<string> oldBase, string inVar, string outVar)
+        {
+            List<string> newBase = oldBase.ToList();
+            newBase.Add(inVar);
+            return newBase.Where(b => !string.Equals(b, outVar));
         }
 
         public bool CheckEnd(FuzzyTableau tableau)
@@ -164,7 +167,7 @@ namespace TODSLibreria.FuzzySimplexService
 
             if (tableau != null && tableau.FuzzyZRow != null)
             {
-                isEnd = tableau.NotSolution || (!tableau.ZRow.CuerpoNum.Any(n => n < 0) && tableau.ZRow.TerminoIndependiente > 0);
+                foreach (string item in tableau.Base) if (tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Any(v => v.Value < 0)) isEnd = true;
             }
 
             return isEnd;

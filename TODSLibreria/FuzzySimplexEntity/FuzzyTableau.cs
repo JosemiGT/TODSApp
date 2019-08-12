@@ -23,13 +23,36 @@ namespace TODSLibreria.FuzzySimplexEntity
         {
             this.StandardConstraint = standardConstraint;
             this.FuzzyZRow = fo;
+            this.Base = GetInitialBase(this);
         }
 
         public FuzzyTableau(IEnumerable<FuzzyVectorEquation> standardConstraint, FuzzyObjectiveFunction fo)
         {
             this.FuzzyStandardConstraint = standardConstraint;
             this.FuzzyZRow = fo;
+            this.Base = GetInitialBase(this);
         }
 
+        public FuzzyTableau(IEnumerable<VectorEquation> standardConstraint, FuzzyObjectiveFunction fo, IEnumerable<string> _base)
+        {
+            this.StandardConstraint = standardConstraint;
+            this.FuzzyZRow = fo;
+            this.Base = _base;
+        }
+
+        public FuzzyTableau(IEnumerable<FuzzyVectorEquation> standardConstraint, FuzzyObjectiveFunction fo, IEnumerable<string> _base)
+        {
+            this.FuzzyStandardConstraint = standardConstraint;
+            this.FuzzyZRow = fo;
+            this.Base = _base;
+        }
+
+        private IEnumerable<string> GetInitialBase(FuzzyTableau tableau)
+        {
+            List<string> _base = new List<string>();
+            if (tableau.FuzzyStandardConstraint != null && tableau.FuzzyStandardConstraint.Count() > 0) _base = tableau.FuzzyStandardConstraint.Select(x => x.Name).ToList();
+            else if (tableau.StandardConstraint != null && tableau.StandardConstraint.Count() > 0) _base = tableau.StandardConstraint.Select(x => x.Nombre).ToList();
+            return _base;
+        }
     }
 }
