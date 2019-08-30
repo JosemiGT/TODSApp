@@ -25,18 +25,21 @@ namespace TODSLibreria.FuzzySimplexService
 
                 foreach(FuzzyConstraint c in constraintList)
                 {
-                    standardHeader.Add(string.Format("S{0}", indice.ToString()));
+                    if (c.Operator == Constantes.MenorIgual) standardHeader.Add(string.Format("S{0}", indice.ToString()));
+                    else if (c.Operator == Constantes.MayorIgual) standardHeader.Add(string.Format("e{0}", indice.ToString()));
                     indice++;
                 }
 
                 foreach(FuzzyConstraint c in constraintList)
                 {
                     Dictionary<string, double> values = new Dictionary<string, double>();
-
+                    int indexA = 1;
                     foreach(string header in standardHeader)
                     {
+
                         if(c.Vector.Any(cv => cv.Key == header)) { values.Add(header, c.Vector.Where(cv => cv.Key == header).FirstOrDefault().Value); }
-                        else if(c.Name == header) { values.Add(header, (c.Operator == Constantes.MenorIgual) ? 1 : (c.Operator == Constantes.MayorIgual) ? - 1 : 0); }
+                        else if(c.Name.Contains("S") && header == c.Name) { values.Add(header, 1); }
+                        else if (c.Name.Contains("e") && header == c.Name) { values.Add(header, -1); values.Add(string.Format("A{0}", indexA.ToString()), 1); indexA++; }
                         else { values.Add(header, 0); }
                     }
 
@@ -64,7 +67,8 @@ namespace TODSLibreria.FuzzySimplexService
 
                 foreach (FuzzyVectorEquation r in constraint)
                 {
-                    fo.FuzzyVector.Add(r.Name, new TRFN(0));
+                    if (!r.Name.Contains("e")) fo.FuzzyVector.Add(r.Name, new TRFN(0));
+                    else if (r.Name.Contains("e") && r.Vector != null) fo.FuzzyVector.Add(r.Vector.Where(v => v.Key.Contains("A") && v.Value > 0).FirstOrDefault().Key, new TRFN(Constantes.NDType.AlfaBetaType, 1,1,0,0));
                 }
 
                 isCorrect = true;
@@ -167,12 +171,29 @@ namespace TODSLibreria.FuzzySimplexService
 
             if (tableau != null && tableau.FuzzyZRow != null)
             {
-                foreach (string item in tableau.Base) if (tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Any(v => v.Value < 0)) isEnd = true;
+                foreach (string item in tableau.Base)
+                {
+                    if (tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Select(v => v.Value).Min() > 0) isEnd = true;
+                    else if (!tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Select(v => v.Value).Max() < 0) isEnd = true;
+                    else if (GetColum(item, tableau).Max() < 0) isEnd = true;
+                }
             }
-
             return isEnd;
-
         }
 
+        public List<double> GetColum(string var, FuzzyTableau tableau)
+        {
+            List<double> colum = new List<double>();
+
+            if(tableau.StandardConstraint.Count() > 0)
+            {
+                foreach(VectorEquation constraint in tableau.StandardConstraint)
+                {
+                    colum.Add(constraint.CuerpoVector.Where(v => v.Key == var).FirstOrDefault().Value);
+                }
+            }
+
+            return colum;
+        }
     }
 }

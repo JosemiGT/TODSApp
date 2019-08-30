@@ -23,6 +23,8 @@ namespace TODSApp
             mainForm = _mainForm;
             config = new Config();
             GetParameterFile();
+            if (!checkBoxFuzzyParameter.Checked) { labelParameter.Hide(); textBoxFuzzyParameter.Hide(); }
+            else { labelParameter.Show(); textBoxFuzzyParameter.Show(); }
         }
 
         private void buttonConfig_Click(object sender, EventArgs e)
@@ -75,7 +77,12 @@ namespace TODSApp
             if (config.Solver != null && config.Solver == Config.ESolver.BasicSimplex)  this.listBoxSolver.SelectedItem = this.listBoxSolver.Items[0];
             else if (config.Solver != null && config.Solver == Config.ESolver.FuzzyPrimalSimplex)  this.listBoxSolver.SelectedItem = this.listBoxSolver.Items[1];
 
+            if(config.AnyFuzzyParameter)  this.checkBoxFuzzyParameter.Checked = true; 
+            else this.checkBoxFuzzyParameter.Checked = false; 
+
             if (!string.IsNullOrEmpty(config.ProblemName)) this.textBoxProblemName.Text = config.ProblemName;
+
+            if (!string.IsNullOrEmpty(config.FuzzyParameterName)) this.textBoxFuzzyParameter.Text = config.FuzzyParameterName;
         }
 
         private void SetParameterFile()
@@ -90,11 +97,21 @@ namespace TODSApp
             else if (this.listBoxSolver.SelectedItem == this.listBoxSolver.Items[1]) config.Solver = Config.ESolver.FuzzyPrimalSimplex;
 
             if (!string.IsNullOrEmpty(this.textBoxProblemName.Text)) config.ProblemName = this.textBoxProblemName.Text;
+
+            config.AnyFuzzyParameter = this.checkBoxFuzzyParameter.Checked;
+
+            if (!string.IsNullOrEmpty(this.textBoxFuzzyParameter.Text)) config.FuzzyParameterName = this.textBoxFuzzyParameter.Text;
         }
 
         private bool CheckParameter()
         {
             return ((this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[0] && this.listBoxSolver.SelectedItem == this.listBoxSolver.Items[0]) || (this.listBoxTipoNumeros.SelectedItem == this.listBoxTipoNumeros.Items[1] && this.listBoxSolver.SelectedItem != this.listBoxSolver.Items[0]));
+        }
+
+        private void checkBoxFuzzyParameter_CheckedChanged(object sender, EventArgs e)
+        {
+            if (!checkBoxFuzzyParameter.Checked) { labelParameter.Hide(); textBoxFuzzyParameter.Hide(); }
+            else { labelParameter.Show(); textBoxFuzzyParameter.Show(); }
         }
     }
 }

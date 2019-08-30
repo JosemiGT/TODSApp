@@ -204,6 +204,42 @@ namespace TODSLibreria.SimplexSpine
             return ((header.Count > 0 && fuzzyEquations.Count > 0 && fuzzyObjectiveFunction != null) || (header.Count > 0 && equations.Count > 0 && objectiveFunction != null));
         }
 
+        public bool GetFuzzyParameter(string path, string sheetName, out List<FuzzyParameter> fuzzyParameters)
+        {
+            bool isCorrect = false;
+            fuzzyParameters = new List<FuzzyParameter>();
+
+            if(!string.IsNullOrEmpty(path) && !string.IsNullOrEmpty(sheetName))
+            {
+                UsoExcel helperExcel = new UsoExcel(path);
+
+                if(helperExcel.SiProcesoCorrecto && helperExcel.ComprobarSiExisteHoja(sheetName, out int index) &&
+                    helperExcel.ObtenerDimensionesHoja(index, out int countRow, out int countCol))
+                {
+                    string[,] data = helperExcel.ObtenerDatosHoja(sheetName);
+
+                    for(int i = 0; i < countRow - 1; i++)
+                    {
+                        TRFN numT = null;
+                        string parName = string.Empty;
+                        for (int j = 0; j < countCol - 1; i++)
+                        {
+                            if(!GetFuzzyNumber(data[i,j],out numT))
+                            {
+                                parName = data[i, j];
+                            }
+                        }
+
+                        if(!string.IsNullOrEmpty(parName) && numT != null) fuzzyParameters.Add(new FuzzyParameter(parName, numT));
+                    }
+
+                }
+
+            }
+
+            return isCorrect;
+        }
+
         private bool GetFuzzyNumber(string data, out TRFN FuzzyNumber)
         {
             bool isCorrect = false;

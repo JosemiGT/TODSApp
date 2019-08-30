@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TODSLibreria.FuzzyEntity;
 
 namespace TODSLibreria
 {
@@ -43,5 +44,7 @@ namespace TODSLibreria
         public const string TextoNoDatos = "El formato de los datos introducidos no es correcto.";
 
         public enum NDType { NumType, AlfaBetaType};
+
+        public static readonly TRFN fuzzyZero = new TRFN(0);
     }
 }
