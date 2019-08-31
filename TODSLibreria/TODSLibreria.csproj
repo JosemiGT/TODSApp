@@ -48,6 +48,7 @@
     <Compile Include="FuzzyEntity\TRFNOperation.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyConstraint.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyObjectiveFunction.cs" />
+    <Compile Include="FuzzySimplexEntity\FuzzySimplexSolution.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyTableau.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyVectorEquation.cs" />
     <Compile Include="FuzzySimplexService\FuzzyPrimalSimplexService.cs" />

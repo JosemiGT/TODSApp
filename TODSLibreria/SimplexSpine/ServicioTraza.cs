@@ -4,6 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using TODSLibreria.FuzzyEntity;
+using TODSLibreria.FuzzySimplexEntity;
 using TODSLibreria.SimplexEntity;
 
 namespace TODSLibreria.SimplexSpine
@@ -100,7 +102,7 @@ namespace TODSLibreria.SimplexSpine
             }
         }
 
-        public void TrazaEcuacionVectorial(VectorEquation ev)
+        public void TrazaEcuacionVectorialVertical(VectorEquation ev)
         {
             if (ev != null && ev.CuerpoVector.Count() > 0)
             {
@@ -116,6 +118,31 @@ namespace TODSLibreria.SimplexSpine
                 mytxt.WriteLine("");
                 mytxt.WriteLine("Termino Independiente: {0}",ev.TerminoIndependiente.ToString());
                 mytxt.WriteLine("");
+                mytxt.Close();
+
+            }
+        }
+
+
+
+        public void TrazaSolution(FuzzySimplexSolution solution)
+        {
+            if(solution != null && solution.VarValue.Count() > 0 && solution.OptimalSolution != null)
+            {
+
+                StreamWriter mytxt = File.AppendText(Path);
+                mytxt.WriteLine("");
+                mytxt.WriteLine("###-Resultado del modelo:-###");
+                mytxt.WriteLine("");
+
+                foreach(KeyValuePair<string, TRFN> var in solution.VarValue)
+                {
+                    mytxt.WriteLine("{0} ==> [{1}; {2}; {3}; {4}]",var.Key, var.Value.L.ToString(), var.Value.U.ToString(), var.Value.Alfa.ToString(), var.Value.Beta.ToString());
+                }
+
+                mytxt.WriteLine("Valor Optimo (Z) ==> [{0}; {1}; {2}; {3}]", solution.OptimalSolution.L.ToString(), solution.OptimalSolution.U.ToString(), solution.OptimalSolution.Alfa.ToString(), solution.OptimalSolution.Beta.ToString());
+
+
                 mytxt.Close();
 
             }

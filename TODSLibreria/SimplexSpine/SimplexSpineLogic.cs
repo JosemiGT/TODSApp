@@ -19,7 +19,7 @@ namespace TODSLibreria.SimplexSpine
         public SimplexSpineLogic(string path)
         {
             string pathParent = Directory.GetParent(path).ToString();
-            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + Constantes.ExtensionTxt);
+            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToShortDateString() + Constantes.ExtensionTxt);
             this.Path = path;
         }
 
@@ -44,7 +44,7 @@ namespace TODSLibreria.SimplexSpine
 
                 Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
                 Trace.TrazaTexto(Constantes.TextoValor);
-                Trace.TrazaEcuacionVectorial(tabla.FuncionObjetivo);
+                Trace.TrazaEcuacionVectorialVertical(tabla.FuncionObjetivo);
             }
 
             return siCorrecto;
@@ -55,30 +55,29 @@ namespace TODSLibreria.SimplexSpine
             bool isCorrect = false;
             ConectorDatosApp conector = new ConectorDatosApp();
             FuzzyPrimalSimplexService service = new FuzzyPrimalSimplexService();
+            InitialFuzzyBasicSolution initial = new InitialFuzzyBasicSolution();
             KeyValuePair<string, double> minVar = new KeyValuePair<string, double>();
             KeyValuePair<string, double> pivot = new KeyValuePair<string, double>();
 
-            //TODO: Necesario solución inicial con el método de los dos fases para verificar que el problema tiene solución.
-            //--> Revisar en artículo de fuzzy la última parte, hacer solución z = 0;
-
-            if (!string.IsNullOrWhiteSpace(sheetName) && conector.GetFuzzyDataSimplex(Path,sheetName, out FuzzyTableau tableau))
+            if (!string.IsNullOrWhiteSpace(sheetName) && conector.GetFuzzyDataSimplex(Path,sheetName, out FuzzyTableau tableau) && initial.Check(ref tableau))
             {
                 service.Pivoting(ref tableau, out minVar, out pivot);
                 service.ReduceColumns(ref tableau, pivot, minVar.Key);
 
-                while (!service.CheckEnd(tableau)) //TODO: Revisar condiciones de parada --> z Positivo (max) o Negativo (min) && es variable no básica --> Se para.
+                while (!service.CheckEnd(tableau)) 
                 {
                     service.Pivoting(ref tableau, out minVar, out pivot);
                     service.ReduceColumns(ref tableau, pivot, minVar.Key);
                 }
 
-                //TODO: La solución a pintar, no sería el z fuzzy tableau, si no que sería la base que se forme con la columna RFuzzy (terminos independiente), por lo que es necesario cambiar la interpretación de resultado.
-                Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
-                Trace.TrazaTexto(Constantes.TextoValor);
-                Trace.TrazaEcuacionVectorial(tableau.ZRow);
-                isCorrect = true;
-
+                if(tableau != null && tableau.isSolution)
+                {
+                    Trace.TrazaTextoConFecha(Constantes.TextoSiSolucion);
+                    Trace.TrazaSolution(service.GetSolution(tableau));
+                    isCorrect = true;
+                }
             }
+            else { Trace.TrazaTextoConFecha(Constantes.TextoNoSolucion); }
 
             return isCorrect;
         }

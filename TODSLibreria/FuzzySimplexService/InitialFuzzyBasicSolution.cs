@@ -10,7 +10,7 @@ namespace TODSLibreria.FuzzySimplexService
     public class InitialFuzzyBasicSolution
     {
 
-        public bool Check(FuzzyTableau tableau)
+        public bool Check(ref FuzzyTableau tableau)
         {
             FuzzyTableau initialTableau = null;
             FuzzyPrimalSimplexService service = new FuzzyPrimalSimplexService();
@@ -29,7 +29,9 @@ namespace TODSLibreria.FuzzySimplexService
 
             if(initialTableau.FuzzyZRow.IndependentTerm == Constantes.fuzzyZero)
             {
-                //TODO: Reducir columnas para eliminar variable artificial.
+                initialTableau = new FuzzyTableau(initialTableau.StandardConstraint, tableau.FuzzyZRow);
+
+                //TODO: Falta reducir columnas para pruebas.
             }
 
             return (!tableau.FuzzyZRow.FuzzyVector.Any(v => v.Key.Contains("A")) || (initialTableau != null && initialTableau.isSolution && initialTableau.FuzzyZRow.IndependentTerm == Constantes.fuzzyZero));

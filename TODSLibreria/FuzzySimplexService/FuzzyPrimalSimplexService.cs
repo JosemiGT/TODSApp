@@ -95,6 +95,7 @@ namespace TODSLibreria.FuzzySimplexService
 
                 pivot = GetPivot(refVar, ref tableau);
                 isCorrect = true;
+                tableau.isSolution = true;
             }
             return isCorrect;
         }
@@ -115,7 +116,10 @@ namespace TODSLibreria.FuzzySimplexService
                 string iteracionS = !string.IsNullOrEmpty(ev.Name) ? ev.Name : string.Empty;
                 if (tabla.FuzzyZRow.IsMax && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) < valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
                 else if (!tabla.FuzzyZRow.IsMax && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) > valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
+
+                if(tabla.isSolution) tabla.isSolution = (iteracionN > 0);
             }
+
 
             return new KeyValuePair<string, double>(restriccionS, pivoteValor);
         }
@@ -194,6 +198,27 @@ namespace TODSLibreria.FuzzySimplexService
             }
 
             return colum;
+        }
+
+        public FuzzySimplexSolution GetSolution(FuzzyTableau tableau)
+        {
+            FuzzySimplexSolution solution = new FuzzySimplexSolution();
+            IDictionary<string, TRFN> varValues = new Dictionary<string, TRFN>();
+
+            if(tableau != null && tableau.FuzzyStandardConstraint.Count() > 0)
+            {
+                foreach(FuzzyVectorEquation constrain in tableau.FuzzyStandardConstraint)
+                {
+                    foreach(string varBase in tableau.Base)
+                    {
+                       if(constrain.Vector.Where(v => v.Key.Equals(varBase) && v.Value == 1).Count() > 0) varValues.Add(constrain.Vector.Where(v => v.Key.Equals(varBase) && v.Value == 1).FirstOrDefault().Key, constrain.IndependentTerm);
+                    }
+
+                }
+
+            }
+
+            return solution;
         }
     }
 }
