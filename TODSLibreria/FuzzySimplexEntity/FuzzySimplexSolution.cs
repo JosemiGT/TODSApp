@@ -11,5 +11,11 @@ namespace TODSLibreria.FuzzySimplexEntity
     {
         public IDictionary<string,TRFN> VarValue { get; set; }
         public TRFN OptimalSolution { get; set; }
+
+        public FuzzySimplexSolution(IDictionary<string,TRFN> varValue, TRFN solution)
+        {
+            this.VarValue = varValue;
+            this.OptimalSolution = solution;
+        }
     }
 }

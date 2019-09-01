@@ -13,17 +13,15 @@ namespace TODSLibreria.FuzzySimplexService
 
         public bool Check(ref FuzzyTableau tableau)
         {
+            bool isSolution = false;
+
             FuzzyTableau initialTableau = null;
             FuzzyPrimalSimplexService service = new FuzzyPrimalSimplexService();
+            TRFNOperation fuzzyOperator = new TRFNOperation();
             DataManagement dataManagement = new DataManagement();
 
             if(tableau.FuzzyZRow != null && tableau.FuzzyStandardConstraint.Count() > 0 && tableau.FuzzyZRow.FuzzyVector.Any(v => v.Key.Contains("A")))
             {
-                //FuzzyObjectiveFunction initialProblemFO = new FuzzyObjectiveFunction(tableau.FuzzyZRow.FuzzyVector.Where(v => v.Key.Contains("A")).ToDictionary(x => x.Key, x => x.Value), new FuzzyEntity.TRFN(0), false);
-
-                TRFNOperation fuzzyOperator = new TRFNOperation();
-                
-
                 Dictionary<string, TRFN> newFO = new Dictionary<string, TRFN>();
                 foreach (KeyValuePair<string, TRFN> varFO in tableau.FuzzyZRow.FuzzyVector)
                 {
@@ -51,14 +49,13 @@ namespace TODSLibreria.FuzzySimplexService
                 }
             }
 
-            if(initialTableau.FuzzyZRow.IndependentTerm == Constantes.fuzzyZero)
+            if(initialTableau != null && fuzzyOperator.IsZero(initialTableau.FuzzyZRow.IndependentTerm)) 
             {
-                initialTableau = new FuzzyTableau(initialTableau.StandardConstraint, tableau.FuzzyZRow);
-
-                //TODO: Falta reducir columnas para pruebas.
+                tableau = EliminateArtificialColum(new FuzzyTableau(initialTableau.FuzzyStandardConstraint, tableau.FuzzyZRow));
+                isSolution = true;
             }
 
-            return (!tableau.FuzzyZRow.FuzzyVector.Any(v => v.Key.Contains("A")) || (initialTableau != null && initialTableau.isSolution && initialTableau.FuzzyZRow.IndependentTerm == Constantes.fuzzyZero));
+            return (!tableau.FuzzyZRow.FuzzyVector.Any(v => v.Key.Contains("A")) || isSolution);
         }
 
         public FuzzyObjectiveFunction ReduceArtificialVar(FuzzyObjectiveFunction foArtificial, IEnumerable<FuzzyVectorEquation> constraints)
@@ -81,6 +78,18 @@ namespace TODSLibreria.FuzzySimplexService
             }
 
             return newFO;
+        }
+
+        public FuzzyTableau EliminateArtificialColum (FuzzyTableau tableau)
+        {
+            List<FuzzyVectorEquation> constraint = new List<FuzzyVectorEquation>();
+            FuzzyObjectiveFunction fuzzyObjective = new FuzzyObjectiveFunction(tableau.FuzzyZRow.FuzzyVector.Where(v => !v.Key.Contains("A")).ToDictionary(x => x.Key, x => x.Value), tableau.FuzzyZRow.IndependentTerm, tableau.FuzzyZRow.IsMax);
+            foreach(FuzzyVectorEquation equation in tableau.FuzzyStandardConstraint)
+            {
+                constraint.Add(new FuzzyVectorEquation(equation.Name, equation.Vector.Where(v => !v.Key.Contains("A")).ToDictionary(x => x.Key, x => x.Value), equation.IndependentTerm));
+            }
+
+            return new FuzzyTableau(constraint, fuzzyObjective);
         }
     }
 }

@@ -148,9 +148,6 @@ namespace TODSLibreria.FuzzySimplexService
             string restriccionS = string.Empty;
             double pivoteValor = double.NaN;
 
-            //if (tabla.FuzzyZRow.IsMax) valorCompareIteracion = double.MaxValue;
-            //else if (!tabla.FuzzyZRow.IsMax) valorCompareIteracion = double.MinValue;
-
             valorCompareIteracion = double.MaxValue;
 
             foreach (FuzzyVectorEquation ev in tabla.FuzzyStandardConstraint)
@@ -158,8 +155,7 @@ namespace TODSLibreria.FuzzySimplexService
                 double iteracionN = ev.Vector.Where(v => v.Key == variableMinima.Key).FirstOrDefault().Value;
                 string iteracionS = !string.IsNullOrEmpty(ev.Name) ? ev.Name : string.Empty;
                 if (iteracionN > 0 && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) < valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
-                //else if (!tabla.FuzzyZRow.IsMax && (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN) > valorCompareIteracion) { pivoteValor = iteracionN; restriccionS = iteracionS; valorCompareIteracion = (tabla.RColumn.CuerpoVector.Where(v => v.Key == ev.Name).FirstOrDefault().Value / iteracionN); }
-
+                
                 if(tabla.isSolution) tabla.isSolution = (iteracionN > 0);
             }
 
@@ -192,25 +188,29 @@ namespace TODSLibreria.FuzzySimplexService
                     {
                         double pivoteev = ev.Vector.Where(r => r.Key == minVar).FirstOrDefault().Value;
                         string opPivot = (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ? "-" : "+";
-                        resultado.Add(new FuzzyVectorEquation(ev.Name, ev.Header, 
-                                    op.OperacionV1parametroV2(ev.Numbers, opPivot, pivoteev, evreferencia.Numbers), 
-                                    (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ? 
-                                        fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev)) : 
-                                        fop.Addition(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev))));
+                        if (pivoteev != 0) resultado.Add(new FuzzyVectorEquation(ev.Name, ev.Header,
+                                     op.OperacionV1parametroV2(ev.Numbers, opPivot, pivoteev, evreferencia.Numbers),
+                                     (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ?
+                                         fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev)) :
+                                         fop.Addition(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev))));
+                        else resultado.Add(ev);
                     }
 
                 }
 
                 TRFN pivotefo = tableau.FuzzyZRow.FuzzyVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
-                FuzzyObjectiveFunction fo = (pivotefo.L + pivotefo.U > 0 && varValue > 0 || pivotefo.L + pivotefo.U < 0 && varValue < 0) ? 
-                                new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header,fop.ReduceFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo),evreferencia.IndependentTerm )), tableau.FuzzyZRow.IsMax):
-                                new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header,fop.AdditionFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(pivotefo,evreferencia.IndependentTerm )), tableau.FuzzyZRow.IsMax);
+                FuzzyObjectiveFunction fo = null;
 
+                if (!fop.IsZero(pivotefo)) //fo = (pivotefo.L + pivotefo.U > 0 && varValue > 0 || pivotefo.L + pivotefo.U < 0 && varValue < 0 || pivotefo.L + pivotefo.U < 0 && varValue > 0) ?
+                    fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.ReduceFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo), evreferencia.IndependentTerm)), tableau.FuzzyZRow.IsMax); // :
+                                 //new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.AdditionFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(pivotefo, evreferencia.IndependentTerm)), tableau.FuzzyZRow.IsMax);
+                else fo = tableau.FuzzyZRow;
 
                 //Actualizamos nombre pivote en ecuación
-                tableau.FuzzyStandardConstraint.Where(c => c.Name.Contains(pivot.Key)).FirstOrDefault().Name = minVar;
-
                 tableau = new FuzzyTableau(resultado, fo, RefreshBase(tableau.Base, minVar, pivot.Key));
+
+                tableau.FuzzyStandardConstraint.Where(c => c.Name.Contains(pivot.Key)).FirstOrDefault().Name = minVar;
+                tableau.isSolution = true;
 
             }
 
@@ -232,9 +232,6 @@ namespace TODSLibreria.FuzzySimplexService
             {
                 foreach (string item in tableau.Base)
                 {
-                    //¿Son sólo las de la base seguro?
-                    //if (tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoVector.Any(v => v.Key == item) && tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Select(v => v.Value).Min() > 0) isEnd = true;
-                    //else if (!tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoVector.Any(v => v.Key == item) && tableau.ZRow.CuerpoVector.Where(v => v.Key == item).Select(v => v.Value).Max() < 0) isEnd = true;
                     if (tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoNum.Min() >= 0) isEnd = true;
                     else if(!tableau.FuzzyZRow.IsMax && tableau.ZRow.CuerpoNum.Max() <= 0) isEnd = true;
                     else if (GetColum(item, tableau).Max() < 0) isEnd = true;
@@ -260,23 +257,7 @@ namespace TODSLibreria.FuzzySimplexService
 
         public FuzzySimplexSolution GetSolution(FuzzyTableau tableau)
         {
-            FuzzySimplexSolution solution = new FuzzySimplexSolution();
-            IDictionary<string, TRFN> varValues = new Dictionary<string, TRFN>();
-
-            if(tableau != null && tableau.FuzzyStandardConstraint.Count() > 0)
-            {
-                foreach(FuzzyVectorEquation constrain in tableau.FuzzyStandardConstraint)
-                {
-                    foreach(string varBase in tableau.Base)
-                    {
-                       if(constrain.Vector.Where(v => v.Key.Equals(varBase) && v.Value == 1).Count() > 0) varValues.Add(constrain.Vector.Where(v => v.Key.Equals(varBase) && v.Value == 1).FirstOrDefault().Key, constrain.IndependentTerm);
-                    }
-
-                }
-
-            }
-
-            return solution;
+            return new FuzzySimplexSolution(tableau.FuzzyStandardConstraint.Select(x => x.Name).Zip(tableau.FuzzyStandardConstraint.Select(x => x.IndependentTerm), (n, i) => new { n, i }).ToDictionary(x => x.n, x => x.i), tableau.FuzzyZRow.IndependentTerm);
         }
 
 

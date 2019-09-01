@@ -91,6 +91,11 @@ namespace TODSLibreria.FuzzyEntity
             return ((N1.L + N1.U) / 2 == (N2.L + N2.U) / 2);
         }
 
+        public bool IsZero(TRFN n)
+        {
+            return (n.L + n.U == 0);
+        }
+
         public IEnumerable<TRFN> ReduceFuzzyRows(IEnumerable<TRFN> Flist1, IEnumerable<TRFN> Flist2)
         {
             return Flist1.Zip(Flist2, (x, y) => Rest(x, y));
