@@ -142,6 +142,8 @@ namespace TODSLibreria.SimplexSpine
                         if (fpsService.StandardizeObjectiveFunction(fuzzyEquations, ref fuzzyObjectiveFunction)) { tableau = new FuzzyTableau(constraints, fuzzyObjectiveFunction); isCorrect = true; }
                     }
                 }
+
+                helperExcel.CerrarLibroExcel();
             }
 
             return isCorrect;
@@ -244,7 +246,7 @@ namespace TODSLibreria.SimplexSpine
         {
             bool isCorrect = false;
             FuzzyNumber = null;
-            string[] numbers = data.Split(Constantes.Separator);
+            string[] numbers = data.Replace("'","").Split(Constantes.Separator);
 
             if (numbers.Length == 4 && double.TryParse(numbers[0], out double L) && double.TryParse(numbers[1], out double U) && double.TryParse(numbers[2], out double alfa) && double.TryParse(numbers[3], out double beta)) { FuzzyNumber = new TRFN(Constantes.NDType.AlfaBetaType, L, U, alfa, beta); isCorrect = true; }
 

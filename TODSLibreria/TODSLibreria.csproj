@@ -51,6 +51,7 @@
     <Compile Include="FuzzySimplexEntity\FuzzySimplexSolution.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyTableau.cs" />
     <Compile Include="FuzzySimplexEntity\FuzzyVectorEquation.cs" />
+    <Compile Include="FuzzySimplexService\DataManagement.cs" />
     <Compile Include="FuzzySimplexService\FuzzyPrimalSimplexService.cs" />
     <Compile Include="FuzzySimplexService\InitialFuzzyBasicSolution.cs" />
     <Compile Include="ODatosExcel\LibroExcel.cs" />

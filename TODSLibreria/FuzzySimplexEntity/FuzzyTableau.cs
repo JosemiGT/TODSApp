@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TODSLibreria.FuzzyEntity;
+using TODSLibreria.FuzzySimplexService;
 using TODSLibreria.SimplexEntity;
 
 namespace TODSLibreria.FuzzySimplexEntity
@@ -18,32 +19,33 @@ namespace TODSLibreria.FuzzySimplexEntity
         public IDictionary<string, TRFN> RHS { get { return FuzzyStandardConstraint.Select(c => c.Name).Zip(FuzzyStandardConstraint.Select(c => c.IndependentTerm), (n, t) => new { n, t }).ToDictionary(x => x.n, x => x.t); } }
         public VectorEquation RColumn { get { return new VectorEquation("R", RHS.Select(f => f.Key), RHS.Select(f => f.Value.U + f.Value.L), 0); } }
         public bool isSolution { get; set; } //{ get { return FuzzyStandardConstraint != null ? FuzzyStandardConstraint.Any(c => (c.FuzzyNums != null ? (c.FuzzyNums.Any(n => n.L < 0 || n.U < 0)):(c.Numbers.Any(n => n < 0)))) : StandardConstraint.Any(c => c.CuerpoNum.Any(n => n < 0)); } }
+        private DataManagement dataManagement { get { return new DataManagement(); } }
 
         public FuzzyTableau(IEnumerable<VectorEquation> standardConstraint, FuzzyObjectiveFunction fo)
         {
-            this.StandardConstraint = standardConstraint;
-            this.FuzzyZRow = fo;
+            this.StandardConstraint = dataManagement.OrderDictionaryByVariable(standardConstraint);
+            this.FuzzyZRow = dataManagement.OrderDictionaryByVariable(fo);
             this.Base = GetInitialBase(this);
         }
 
         public FuzzyTableau(IEnumerable<FuzzyVectorEquation> standardConstraint, FuzzyObjectiveFunction fo)
         {
-            this.FuzzyStandardConstraint = standardConstraint;
-            this.FuzzyZRow = fo;
+            this.FuzzyStandardConstraint = dataManagement.OrderDictionaryByVariable(standardConstraint);
+            this.FuzzyZRow = dataManagement.OrderDictionaryByVariable(fo);
             this.Base = GetInitialBase(this);
         }
 
         public FuzzyTableau(IEnumerable<VectorEquation> standardConstraint, FuzzyObjectiveFunction fo, IEnumerable<string> _base)
         {
-            this.StandardConstraint = standardConstraint;
+            this.StandardConstraint = dataManagement.OrderDictionaryByVariable(standardConstraint);
             this.FuzzyZRow = fo;
             this.Base = _base;
         }
 
         public FuzzyTableau(IEnumerable<FuzzyVectorEquation> standardConstraint, FuzzyObjectiveFunction fo, IEnumerable<string> _base)
         {
-            this.FuzzyStandardConstraint = standardConstraint;
-            this.FuzzyZRow = fo;
+            this.FuzzyStandardConstraint = dataManagement.OrderDictionaryByVariable(standardConstraint);
+            this.FuzzyZRow = dataManagement.OrderDictionaryByVariable(fo);
             this.Base = _base;
         }
 

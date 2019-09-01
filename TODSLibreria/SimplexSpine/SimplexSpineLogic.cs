@@ -19,7 +19,7 @@ namespace TODSLibreria.SimplexSpine
         public SimplexSpineLogic(string path)
         {
             string pathParent = Directory.GetParent(path).ToString();
-            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToShortDateString() + Constantes.ExtensionTxt);
+            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToShortDateString().Replace("\\", "").Replace("/","") + Constantes.ExtensionTxt);
             this.Path = path;
         }
 
@@ -61,8 +61,6 @@ namespace TODSLibreria.SimplexSpine
 
             if (!string.IsNullOrWhiteSpace(sheetName) && conector.GetFuzzyDataSimplex(Path,sheetName, out FuzzyTableau tableau) && initial.Check(ref tableau))
             {
-                service.Pivoting(ref tableau, out minVar, out pivot);
-                service.ReduceColumns(ref tableau, pivot, minVar.Key);
 
                 while (!service.CheckEnd(tableau)) 
                 {

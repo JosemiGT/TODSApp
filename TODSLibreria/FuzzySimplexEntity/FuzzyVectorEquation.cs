@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TODSLibreria.FuzzyEntity;
+using TODSLibreria.FuzzySimplexService;
 
 namespace TODSLibreria.FuzzySimplexEntity
 {
@@ -16,31 +17,32 @@ namespace TODSLibreria.FuzzySimplexEntity
         public IEnumerable<TRFN> FuzzyNums { get { return FuzzyVector?.Select(r => r.Value); } }
         public IEnumerable<double> Numbers { get { return Vector?.Select(r => r.Value); } }
         public TRFN IndependentTerm { get; set; }
+        private DataManagement dataManagement { get { return new DataManagement(); } }
 
         #region Constructors - Full fuzzy vector equations.
         public FuzzyVectorEquation(IDictionary<string, TRFN> cuerpoVector, TRFN termindepe)
         {
-            FuzzyVector = cuerpoVector;
+            FuzzyVector = dataManagement.OrderDictionaryByVariable(cuerpoVector);
             IndependentTerm = termindepe;
         }
 
         public FuzzyVectorEquation(IEnumerable<string> header, IEnumerable<TRFN> vector, TRFN terminoIndepe)
         {
-            FuzzyVector = header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
+            FuzzyVector = dataManagement.OrderDictionaryByVariable(header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
             IndependentTerm = terminoIndepe;
         }
 
         public FuzzyVectorEquation(string name, IDictionary<string, TRFN> vector, TRFN termindepe)
         {
             Name = name;
-            FuzzyVector = vector;
+            FuzzyVector = dataManagement.OrderDictionaryByVariable(vector);
             IndependentTerm = termindepe;
         }
 
         public FuzzyVectorEquation(string name, IEnumerable<string> header, IEnumerable<TRFN> vector, TRFN terminoIndepe)
         {
             Name = name;
-            FuzzyVector = header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
+            FuzzyVector = dataManagement.OrderDictionaryByVariable(header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
             IndependentTerm = terminoIndepe;
         }
         #endregion
@@ -48,13 +50,13 @@ namespace TODSLibreria.FuzzySimplexEntity
         #region Constructors - Only independent term fuzzy.
         public FuzzyVectorEquation(IDictionary<string, double> cuerpoVector, TRFN termindepe)
         {
-            Vector = cuerpoVector;
+            Vector = dataManagement.OrderDictionaryByVariable(cuerpoVector);
             IndependentTerm = termindepe;
         }
 
         public FuzzyVectorEquation(IEnumerable<string> header, IEnumerable<double> vector, TRFN terminoIndepe)
         {
-            Vector = header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
+            Vector = dataManagement.OrderDictionaryByVariable(header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v));
             IndependentTerm = terminoIndepe;
         }
 
@@ -69,6 +71,7 @@ namespace TODSLibreria.FuzzySimplexEntity
         {
             Name = name;
             Vector = header.Zip(vector, (k, v) => new { k, v }).ToDictionary(x => x.k, x => x.v);
+            Vector = dataManagement.OrderDictionaryByVariable(Vector);
             IndependentTerm = terminoIndepe;
         }
         #endregion
