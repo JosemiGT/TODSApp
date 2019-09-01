@@ -80,6 +80,5 @@ namespace TODSLibreria.SimplexSpine
             return isCorrect;
         }
 
-        //TODO: Hacer problema Dual para análisis de sensibilidades. (Execute FuzzyDualSimplex(); --> ¿Método padre para primal y dual y no tener que leer los datos dos veces?
     }
 }
