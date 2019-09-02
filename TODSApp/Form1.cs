@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -82,7 +84,17 @@ namespace TODSApp
                 loadingF.Show();
                 simplexTask.Wait();
                 loadingF.Hide();
-                MessageBox.Show("Ha finalizado el cálculo", "Proceso completado", MessageBoxButtons.OK);
+
+                if (MessageBox.Show("Ha finalizado el cálculo", "Proceso completado. ¿Quiere ver la solución?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
+                {
+                    Config resultConfig = new Config();
+                    using (Stream str = File.Open(resultConfig.ResultPath, FileMode.Open))
+                    {
+                        Process.Start("notepad.exe", resultConfig.ResultPath);
+                    }
+                } 
+
+
 
 
             }

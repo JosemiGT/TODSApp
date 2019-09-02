@@ -24,6 +24,7 @@ namespace TODSLibreria
         public const string aFP = "AnyFuzzyParameter";
         public const string PN = "ProblemName";
         public const string FPN = "FuzzyParameterName";
+        public const string SPN = "SolutionPathName";
         private const string fileName = "TODSconfig.txt";
 
         public enum ENumberType { Real, FuzzyTrap}
@@ -36,6 +37,7 @@ namespace TODSLibreria
         public bool AnyFuzzyParameter { get; set; }
         public string ProblemName { get; set; }
         public string FuzzyParameterName { get; set; }
+        public string ResultPath { get; set; }
 
         private string Path { get; set; }
         private StreamWriter configFile { get; set; }
@@ -87,6 +89,7 @@ namespace TODSLibreria
                     writer.WriteLine(string.Format(aFP + ": {0}", AnyFuzzyParameter.ToString()));
                     if(!string.IsNullOrEmpty(ProblemName)) writer.WriteLine(string.Format(PN + " : {0}", ProblemName));
                     if (!string.IsNullOrEmpty(FuzzyParameterName)) writer.WriteLine(string.Format(FPN + " {0}", FuzzyParameterName));
+                    if (!string.IsNullOrEmpty(ResultPath)) writer.WriteLine(string.Format(SPN + " {0}", ResultPath));
                     isWrite = true;
                 }
             }
@@ -113,7 +116,7 @@ namespace TODSLibreria
                     writer.WriteLine(string.Format(S + " : {0}", eSolver.ToString()));
                     writer.WriteLine(string.Format(aFP + ": {0}", anyParameterFuzzy.ToString()));
                     if (!string.IsNullOrEmpty(problemName)) writer.WriteLine(string.Format(PN + " : {0}", problemName));
-                    if (!string.IsNullOrEmpty(fuzzyParameterName)) writer.WriteLine(string.Format(FPN + " {0}", fuzzyParameterName));
+                    if (!string.IsNullOrEmpty(fuzzyParameterName)) writer.WriteLine(string.Format(FPN + " --> {0}", fuzzyParameterName));
                     isWrite = true;
                 }
             }
@@ -144,6 +147,8 @@ namespace TODSLibreria
                 if (line.Contains(PN)) { ProblemName = line.Replace(PN, "").Replace(":", "").Replace(" ", ""); }
 
                 if (line.Contains(FPN)) { FuzzyParameterName = line.Replace(FPN, "").Replace(":", "").Replace(" ", ""); }
+
+                if (line.Contains(SPN)) { ResultPath = line.Replace(SPN, "").Replace("-->", "").Replace(" ", ""); }
             }
 
             return (NumberType != null || DataType != null || Solver != null || !string.IsNullOrEmpty(ProblemName));

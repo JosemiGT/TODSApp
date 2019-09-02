@@ -43,6 +43,8 @@ namespace TODSLibreria.SimplexSpine
         {
             Path = path;
             _config = config;
+            _config.ResultPath = path;
+            _config.WriteConfig();
             StreamWriter mytxt = File.AppendText(path);
 
             DateTime fechaActual = new DateTime();
