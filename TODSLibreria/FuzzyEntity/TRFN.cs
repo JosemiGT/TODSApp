@@ -34,8 +34,12 @@ namespace TODSLibreria.FuzzyEntity
         #region Constructors
         public TRFN(Constantes.NDType nDType, double a1, double a2, double a3alf, double a4bet)
         {
+            OperacionesNumericas op = new OperacionesNumericas();
+
             if(nDType == Constantes.NDType.AlfaBetaType) { this.L = a1; this.U = a2; this.Alfa = a3alf; this.Beta = a4bet; this.A2 = a1; this.A3 = a2; this.A1 = a1 - a3alf; this.A4 = a2 + a4bet; }
             else if(nDType == Constantes.NDType.NumType) { this.A1 = a1; this.A2 = a2; this.A3 = a3alf; this.A4 = a4bet; this.L = a2; this.U = a3alf; this.Alfa = a2 - a1; this.Beta = a4bet - a3alf; }
+
+            if (IsZero()) { this.A1 = 0; this.A2 = 0; this.A3 = 0; this.A4 = 0; this.L = 0; this.U = 0; this.Alfa = 0; this.Beta = 0; }
         }
 
         public TRFN(double n)
@@ -45,7 +49,10 @@ namespace TODSLibreria.FuzzyEntity
         #endregion
 
         #region PrivateMethod
-
+        private bool IsZero()
+        {
+            return (this.L + this.U == 0);
+        }
         #endregion
     }
 }

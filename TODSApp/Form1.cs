@@ -84,6 +84,7 @@ namespace TODSApp
                 loadingF.Show();
                 simplexTask.Wait();
                 loadingF.Hide();
+                this.siDatos.Checked = false; 
 
                 if (MessageBox.Show("Ha finalizado el cálculo", "Proceso completado. ¿Quiere ver la solución?", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question) == DialogResult.Yes)
                 {

@@ -57,8 +57,10 @@ namespace TODSTest
             string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
             SimplexSpine spine = new SimplexSpine(path, new Config());
 
-            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
             spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyInitialTest");
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTestMin");
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTest");
         }
 
         [TestMethod]

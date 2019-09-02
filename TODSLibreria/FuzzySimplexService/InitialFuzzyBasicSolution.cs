@@ -30,11 +30,12 @@ namespace TODSLibreria.FuzzySimplexService
                 }
 
                 List<FuzzyVectorEquation> newConstraint = new List<FuzzyVectorEquation>();
+
+                int indexA = 1;
                 foreach (FuzzyVectorEquation eqItem in tableau.FuzzyStandardConstraint)
                 {
-                    if (eqItem.Name.Contains("e")) newConstraint.Add(new FuzzyVectorEquation(eqItem.Name.Replace("e", "A"), eqItem.Vector, eqItem.IndependentTerm));
+                    if (eqItem.Name.Contains("e")) { newConstraint.Add(new FuzzyVectorEquation(string.Format("A{0}", indexA.ToString()), eqItem.Vector, eqItem.IndependentTerm)); indexA++; }
                     else newConstraint.Add(eqItem);
-
                 }
 
                 FuzzyObjectiveFunction initialProblemFO = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Name, dataManagement.OrderDictionaryByVariable(newFO), tableau.FuzzyZRow.IndependentTerm, false);

@@ -8,6 +8,8 @@ namespace TODSLibreria.FuzzyEntity
 {
     public class TRFNOperation
     {
+        public OperacionesNumericas _opNum { get { return new OperacionesNumericas(); } }
+
         public TRFN Addition(TRFN N1, TRFN N2)
         {
             return new TRFN(Constantes.NDType.AlfaBetaType, N1.L + N2.L, N1.U + N2.U, N1.Alfa + N2.Alfa, N1.Beta + N2.Beta);
@@ -35,10 +37,10 @@ namespace TODSLibreria.FuzzyEntity
         {
             switch (op)
             {
-                case Constantes.Suma: return new TRFN(Constantes.NDType.AlfaBetaType ,N.L + constant, N.U + constant, N.Alfa + constant, N.Beta + constant);
-                case Constantes.Resta: return new TRFN(Constantes.NDType.AlfaBetaType, N.L - constant, N.U - constant, N.Alfa - constant, N.Beta - constant);
-                case Constantes.Multiplicacion: return new TRFN(Constantes.NDType.AlfaBetaType, N.L * constant, N.U * constant, N.Alfa * constant, N.Beta * constant);
-                case Constantes.Division: return (constant != 0) ? (new TRFN(Constantes.NDType.AlfaBetaType, N.L / constant, N.U / constant, N.Alfa / constant, N.Beta / constant)) : null; 
+                case Constantes.Suma: return new TRFN(Constantes.NDType.AlfaBetaType ,N.L + constant, N.U + constant, N.Alfa + _opNum.ValorAbsoluto(constant), N.Beta + _opNum.ValorAbsoluto(constant));
+                case Constantes.Resta: return new TRFN(Constantes.NDType.AlfaBetaType, N.L - constant, N.U - constant, N.Alfa + _opNum.ValorAbsoluto(constant), N.Beta + _opNum.ValorAbsoluto(constant));
+                case Constantes.Multiplicacion: return new TRFN(Constantes.NDType.AlfaBetaType, N.L * constant, N.U * constant, N.Alfa * _opNum.ValorAbsoluto(constant), N.Beta * _opNum.ValorAbsoluto(constant));
+                case Constantes.Division: return (constant != 0) ? (new TRFN(Constantes.NDType.AlfaBetaType, N.L / constant, N.U / constant, N.Alfa / _opNum.ValorAbsoluto(constant), N.Beta / _opNum.ValorAbsoluto(constant))) : null; 
                 default: return null;
             }
         }

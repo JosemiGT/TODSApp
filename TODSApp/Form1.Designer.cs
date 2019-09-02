@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.panel1 = new System.Windows.Forms.Panel();
+            this.buttonClose = new System.Windows.Forms.Button();
+            this.buttonConfig = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.labelDatos = new System.Windows.Forms.Label();
             this.BuscarButton = new System.Windows.Forms.Button();
@@ -41,8 +43,6 @@
             this.BotonDatos = new System.Windows.Forms.Button();
             this.siDatos = new System.Windows.Forms.CheckBox();
             this.BotonEjecutar = new System.Windows.Forms.Button();
-            this.buttonClose = new System.Windows.Forms.Button();
-            this.buttonConfig = new System.Windows.Forms.Button();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.panel1.SuspendLayout();
@@ -54,15 +54,50 @@
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(46)))), ((int)(((byte)(93)))));
-            this.panel1.Controls.Add(this.buttonClose);
             this.panel1.Controls.Add(this.buttonConfig);
+            this.panel1.Controls.Add(this.buttonClose);
             this.panel1.Controls.Add(this.label1);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel1.Location = new System.Drawing.Point(0, 0);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(1375, 84);
+            this.panel1.Size = new System.Drawing.Size(1368, 84);
             this.panel1.TabIndex = 10;
             this.panel1.Paint += new System.Windows.Forms.PaintEventHandler(this.panel1_Paint);
             this.panel1.MouseMove += new System.Windows.Forms.MouseEventHandler(this.panel1_MouseMove);
+            // 
+            // buttonClose
+            // 
+            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
+            this.buttonClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonClose.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonClose.FlatAppearance.BorderSize = 0;
+            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonClose.Image = global::TODSApp.Properties.Resources.X1;
+            this.buttonClose.Location = new System.Drawing.Point(1289, 0);
+            this.buttonClose.Name = "buttonClose";
+            this.buttonClose.Size = new System.Drawing.Size(79, 84);
+            this.buttonClose.TabIndex = 5;
+            this.buttonClose.UseMnemonic = false;
+            this.buttonClose.UseVisualStyleBackColor = false;
+            this.buttonClose.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // buttonConfig
+            // 
+            this.buttonConfig.BackColor = System.Drawing.Color.Transparent;
+            this.buttonConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
+            this.buttonConfig.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttonConfig.FlatAppearance.BorderColor = System.Drawing.Color.White;
+            this.buttonConfig.FlatAppearance.BorderSize = 0;
+            this.buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.buttonConfig.Image = global::TODSApp.Properties.Resources.Configuracion;
+            this.buttonConfig.Location = new System.Drawing.Point(1212, 0);
+            this.buttonConfig.Name = "buttonConfig";
+            this.buttonConfig.Size = new System.Drawing.Size(77, 84);
+            this.buttonConfig.TabIndex = 6;
+            this.buttonConfig.UseMnemonic = false;
+            this.buttonConfig.UseVisualStyleBackColor = false;
+            this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
             // 
             // label1
             // 
@@ -110,10 +145,11 @@
             this.panel2.Controls.Add(this.richTextBox1);
             this.panel2.Controls.Add(this.labelInformacion);
             this.panel2.Controls.Add(this.InformacionBox);
-            this.panel2.Location = new System.Drawing.Point(1015, 82);
+            this.panel2.Dock = System.Windows.Forms.DockStyle.Right;
+            this.panel2.Location = new System.Drawing.Point(1005, 84);
             this.panel2.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(363, 686);
+            this.panel2.Size = new System.Drawing.Size(363, 677);
             this.panel2.TabIndex = 2;
             this.panel2.Paint += new System.Windows.Forms.PaintEventHandler(this.panel2_Paint);
             // 
@@ -235,38 +271,6 @@
             this.BotonEjecutar.UseVisualStyleBackColor = false;
             this.BotonEjecutar.Click += new System.EventHandler(this.BotonEjecutar_Click);
             // 
-            // buttonClose
-            // 
-            this.buttonClose.BackColor = System.Drawing.Color.Transparent;
-            this.buttonClose.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonClose.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.buttonClose.FlatAppearance.BorderSize = 0;
-            this.buttonClose.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonClose.Image = global::TODSApp.Properties.Resources.X1;
-            this.buttonClose.Location = new System.Drawing.Point(1277, 6);
-            this.buttonClose.Name = "buttonClose";
-            this.buttonClose.Size = new System.Drawing.Size(79, 74);
-            this.buttonClose.TabIndex = 5;
-            this.buttonClose.UseMnemonic = false;
-            this.buttonClose.UseVisualStyleBackColor = false;
-            this.buttonClose.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // buttonConfig
-            // 
-            this.buttonConfig.BackColor = System.Drawing.Color.Transparent;
-            this.buttonConfig.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
-            this.buttonConfig.FlatAppearance.BorderColor = System.Drawing.Color.White;
-            this.buttonConfig.FlatAppearance.BorderSize = 0;
-            this.buttonConfig.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.buttonConfig.Image = global::TODSApp.Properties.Resources.Configuracion;
-            this.buttonConfig.Location = new System.Drawing.Point(1015, 6);
-            this.buttonConfig.Name = "buttonConfig";
-            this.buttonConfig.Size = new System.Drawing.Size(77, 78);
-            this.buttonConfig.TabIndex = 6;
-            this.buttonConfig.UseMnemonic = false;
-            this.buttonConfig.UseVisualStyleBackColor = false;
-            this.buttonConfig.Click += new System.EventHandler(this.buttonConfig_Click);
-            // 
             // pictureBox2
             // 
             this.pictureBox2.Image = global::TODSApp.Properties.Resources.EIILogo;
@@ -297,6 +301,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(1368, 761);
+            this.Controls.Add(this.panel2);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.pictureBox2);
             this.Controls.Add(this.BotonEjecutar);
@@ -304,7 +309,6 @@
             this.Controls.Add(this.BotonDatos);
             this.Controls.Add(this.PathBox);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.panel2);
             this.Controls.Add(this.BuscarButton);
             this.Controls.Add(this.labelDatos);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.None;

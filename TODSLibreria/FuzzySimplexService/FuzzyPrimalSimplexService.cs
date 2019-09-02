@@ -193,7 +193,6 @@ namespace TODSLibreria.FuzzySimplexService
                                      fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev))));
                         else resultado.Add(ev);
                     }
-
                 }
 
                 TRFN pivotefo = tableau.FuzzyZRow.FuzzyVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
@@ -207,7 +206,6 @@ namespace TODSLibreria.FuzzySimplexService
 
                 tableau.FuzzyStandardConstraint.Where(c => c.Name.Contains(pivot.Key)).FirstOrDefault().Name = minVar;
                 tableau.isSolution = true;
-
             }
 
             return siCorrecto;
