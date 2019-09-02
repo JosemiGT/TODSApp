@@ -19,7 +19,7 @@ namespace TODSTest
         //public static readonly List<TRFN> foNum = new List<TRFN> { new TRFN(Constantes.NDType.AlfaBetaType, 13, 15, 2, 2),
         //                                                        new TRFN(Constantes.NDType.AlfaBetaType, 12, 14, 3, 3),
         //                                                        new TRFN(Constantes.NDType.AlfaBetaType, 15, 17, 2, 2) };
-        
+
         //public static readonly List<double> vec1 = new List<double> { 12, 13, 12 };
         //public static readonly List<double> vec2 = new List<double> { 14, 0, 13 };
         //public static readonly List<double> vec3 = new List<double> { 12, 15, 0 };
@@ -55,10 +55,10 @@ namespace TODSTest
         public void FuzzySimplexAnddata()
         {
             string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
-            SimplexSpine spine = new SimplexSpine(path); 
+            SimplexSpine spine = new SimplexSpine(path, new Config());
 
-            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
-            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyInitialTest");
+            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyInitialTest");
         }
 
         [TestMethod]

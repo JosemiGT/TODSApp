@@ -42,6 +42,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Config.cs" />
     <Compile Include="Constantes.cs" />
     <Compile Include="FuzzyEntity\FuzzyParameter.cs" />
     <Compile Include="FuzzyEntity\TRFN.cs" />

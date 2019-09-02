@@ -14,8 +14,10 @@ namespace TODSLibreria.SimplexSpine
     {
         private const string Titulo = "Informe de resultados";
         private const string TextoInicial = "Resolución del problema";
+        private const string TextoInicialConNombre = "Resolución del problema: {0}";
 
         private string Path { get; set; }
+        private Config _config { get; set; }
 
         public ServicioTraza(string path)
         {
@@ -30,6 +32,32 @@ namespace TODSLibreria.SimplexSpine
             mytxt.WriteLine(Titulo);
             mytxt.WriteLine("");
             mytxt.WriteLine(TextoInicial);
+            mytxt.WriteLine("");
+            mytxt.WriteLine("Se inicia el proceso - {0}", strDate);
+            mytxt.WriteLine("------------------------------------");
+            mytxt.WriteLine("");
+            mytxt.Close();
+        }
+
+        public ServicioTraza(string path, Config config)
+        {
+            Path = path;
+            _config = config;
+            StreamWriter mytxt = File.AppendText(path);
+
+            DateTime fechaActual = new DateTime();
+            fechaActual = DateTime.Now;
+            string strDate = Convert.ToDateTime(fechaActual).ToString("F");
+
+            mytxt.WriteLine(Titulo);
+            mytxt.WriteLine("");
+            mytxt.WriteLine(string.Format(TextoInicialConNombre,_config.ProblemName));
+            mytxt.WriteLine("");
+            mytxt.WriteLine(string.Format("Parámetros de configuración: "));
+            mytxt.WriteLine("");
+            mytxt.WriteLine(string.Format("Tipos de números: {0} - Solver emplado: {1} ", _config.NumberType.ToString(), _config.Solver.ToString()));
+            if(_config.AnyFuzzyParameter) mytxt.WriteLine(string.Format("Función objetivo con parámetros difusos en pestaña: {0}", _config.FuzzyParameterName));
+            mytxt.WriteLine(string.Format("Tipos de fuente de datos: {0}", _config.DataType.ToString()));
             mytxt.WriteLine("");
             mytxt.WriteLine("Se inicia el proceso - {0}", strDate);
             mytxt.WriteLine("------------------------------------");

@@ -51,7 +51,7 @@ namespace TODSLibreria.FuzzySimplexService
 
             if(initialTableau != null && fuzzyOperator.IsZero(initialTableau.FuzzyZRow.IndependentTerm)) 
             {
-                tableau = EliminateArtificialColum(new FuzzyTableau(initialTableau.FuzzyStandardConstraint, tableau.FuzzyZRow));
+                tableau = EliminateArtificialColum(new FuzzyTableau(initialTableau.FuzzyStandardConstraint, ReduceBaseVar(tableau.FuzzyZRow, initialTableau.FuzzyStandardConstraint)));
                 isSolution = true;
             }
 
@@ -74,6 +74,26 @@ namespace TODSLibreria.FuzzySimplexService
                     if (varName.Contains("A")) vectorRef = constraints.Where(c => c.Vector.Any(v => v.Key == varName && v.Value == 1)).FirstOrDefault();
 
                     if(vectorRef != null && vectorRef.Vector.Count() > 0) newFO = new FuzzyObjectiveFunction(foArtificial.Header, fop.AdditionFuzzyRows(newFO.FuzzyNums, fop.OperateFuzzyConstant(vectorRef.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(newFO.IndependentTerm, fop.Multiplication(pivotefo, vectorRef.IndependentTerm)), foArtificial.IsMax);
+                }
+            }
+
+            return newFO;
+        }
+
+        public FuzzyObjectiveFunction ReduceBaseVar(FuzzyObjectiveFunction foArtificial, IEnumerable<FuzzyVectorEquation> constraints)
+        {
+            FuzzyObjectiveFunction newFO = foArtificial;
+            TRFNOperation fop = new TRFNOperation();
+
+            if (foArtificial != null && foArtificial.FuzzyVector.Count() > 0)
+            {
+
+                foreach (string varName in constraints.Select(x => x.Name))
+                {
+                    FuzzyVectorEquation vectorRef = constraints.Where(c => c.Vector.Any(v => v.Key == varName && v.Value == 1)).FirstOrDefault();
+
+                    TRFN pivotefo = foArtificial.FuzzyVector.Where(r => r.Key == varName).FirstOrDefault().Value;
+                    if (!fop.IsZero(pivotefo)) newFO = new FuzzyObjectiveFunction(foArtificial.Header, fop.ReduceFuzzyRows(newFO.FuzzyNums, fop.OperateFuzzyConstant(vectorRef.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(newFO.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo), vectorRef.IndependentTerm)), newFO.IsMax); 
                 }
             }
 

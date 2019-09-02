@@ -19,7 +19,7 @@ namespace TODSLibreria.SimplexSpine
         public SimplexSpineLogic(string path)
         {
             string pathParent = Directory.GetParent(path).ToString();
-            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToShortDateString().Replace("\\", "").Replace("/","") + Constantes.ExtensionTxt);
+            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + DateTime.Now.ToShortDateString().Replace("\\", "").Replace("/","") + Constantes.ExtensionTxt, new Config());
             this.Path = path;
         }
 

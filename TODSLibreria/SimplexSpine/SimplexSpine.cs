@@ -12,10 +12,10 @@ namespace TODSLibreria.SimplexSpine
         private string Path { get; set; }
         private ServicioTraza Trace { get; set; }
 
-        public SimplexSpine(string path)
+        public SimplexSpine(string path, Config config)
         {
             string pathParent = Directory.GetParent(path).ToString();
-            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + Constantes.ExtensionTxt);
+            this.Trace = new ServicioTraza(pathParent + Constantes.ResultadoTxt + Constantes.ExtensionTxt, config);
             this.Path = path;
         }
 

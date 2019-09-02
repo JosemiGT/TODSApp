@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using TODSLibreria;
 using TODSLibreria.ODatosExcel;
 using TODSLibreria.SimplexSpine;
 
@@ -68,9 +69,9 @@ namespace TODSApp
 
         }
 
-        private async void BotonEjecutar_Click(object sender, EventArgs e)
+        private void BotonEjecutar_Click(object sender, EventArgs e)
         {
-            SimplexSpine spine = new SimplexSpine(PathBox.Text);
+            SimplexSpine spine = new SimplexSpine(PathBox.Text, ajustesForm.config);
 
             if (siDatos.Checked && ajustesForm.config.DataType == Config.EDataType.XLS)
             {

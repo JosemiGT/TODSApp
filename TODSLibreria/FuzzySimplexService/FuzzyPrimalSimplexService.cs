@@ -187,12 +187,10 @@ namespace TODSLibreria.FuzzySimplexService
                     else if (ev.Name != pivot.Key)
                     {
                         double pivoteev = ev.Vector.Where(r => r.Key == minVar).FirstOrDefault().Value;
-                        string opPivot = (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ? "-" : "+";
+                        //string opPivot = (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ? "-" : "+";
                         if (pivoteev != 0) resultado.Add(new FuzzyVectorEquation(ev.Name, ev.Header,
-                                     op.OperacionV1parametroV2(ev.Numbers, opPivot, pivoteev, evreferencia.Numbers),
-                                     (pivoteev > 0 && varValue > 0 || pivoteev < 0 && varValue < 0) ?
-                                         fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev)) :
-                                         fop.Addition(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev))));
+                                     op.OperacionV1parametroV2(ev.Numbers, "-", pivoteev, evreferencia.Numbers),
+                                     fop.Subtraction(ev.IndependentTerm, fop.OperateConstant(evreferencia.IndependentTerm, Constantes.Multiplicacion, pivoteev))));
                         else resultado.Add(ev);
                     }
 
@@ -201,9 +199,7 @@ namespace TODSLibreria.FuzzySimplexService
                 TRFN pivotefo = tableau.FuzzyZRow.FuzzyVector.Where(r => r.Key == minVar).FirstOrDefault().Value;
                 FuzzyObjectiveFunction fo = null;
 
-                if (!fop.IsZero(pivotefo)) //fo = (pivotefo.L + pivotefo.U > 0 && varValue > 0 || pivotefo.L + pivotefo.U < 0 && varValue < 0 || pivotefo.L + pivotefo.U < 0 && varValue > 0) ?
-                    fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.ReduceFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo), evreferencia.IndependentTerm)), tableau.FuzzyZRow.IsMax); // :
-                                 //new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.AdditionFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(pivotefo, evreferencia.IndependentTerm)), tableau.FuzzyZRow.IsMax);
+                if (!fop.IsZero(pivotefo)) fo = new FuzzyObjectiveFunction(tableau.FuzzyZRow.Header, fop.ReduceFuzzyRows(tableau.FuzzyZRow.FuzzyNums, fop.OperateFuzzyConstant(evreferencia.Numbers, Constantes.Multiplicacion, pivotefo)), fop.Addition(tableau.FuzzyZRow.IndependentTerm, fop.Multiplication(fop.MakeNegative(pivotefo), evreferencia.IndependentTerm)), tableau.FuzzyZRow.IsMax);                                
                 else fo = tableau.FuzzyZRow;
 
                 //Actualizamos nombre pivote en ecuación
