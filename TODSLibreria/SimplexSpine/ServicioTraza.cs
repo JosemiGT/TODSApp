@@ -51,6 +51,8 @@ namespace TODSLibreria.SimplexSpine
             fechaActual = DateTime.Now;
             string strDate = Convert.ToDateTime(fechaActual).ToString("F");
 
+            mytxt.WriteLine(Constantes.Separador);
+            mytxt.WriteLine("");
             mytxt.WriteLine(Titulo);
             mytxt.WriteLine("");
             mytxt.WriteLine(string.Format(TextoInicialConNombre,_config.ProblemName));
@@ -62,7 +64,7 @@ namespace TODSLibreria.SimplexSpine
             mytxt.WriteLine(string.Format("Tipos de fuente de datos: {0}", _config.DataType.ToString()));
             mytxt.WriteLine("");
             mytxt.WriteLine("Se inicia el proceso - {0}", strDate);
-            mytxt.WriteLine("------------------------------------");
+            mytxt.WriteLine(Constantes.Separador);
             mytxt.WriteLine("");
             mytxt.Close();
         }
@@ -161,8 +163,9 @@ namespace TODSLibreria.SimplexSpine
             {
 
                 StreamWriter mytxt = File.AppendText(Path);
+                mytxt.WriteLine(Constantes.Separador);
                 mytxt.WriteLine("");
-                mytxt.WriteLine("###-Resultado del modelo:-###");
+                mytxt.WriteLine("###-Resultado del problema:-###");
                 mytxt.WriteLine("");
 
                 foreach(KeyValuePair<string, TRFN> var in solution.VarValue)
@@ -170,8 +173,9 @@ namespace TODSLibreria.SimplexSpine
                     mytxt.WriteLine("{0} ==> [{1}; {2}; {3}; {4}]",var.Key, var.Value.L.ToString(), var.Value.U.ToString(), var.Value.Alfa.ToString(), var.Value.Beta.ToString());
                 }
 
-                mytxt.WriteLine("Valor Optimo (Z) ==> [{0}; {1}; {2}; {3}]", solution.OptimalSolution.L.ToString(), solution.OptimalSolution.U.ToString(), solution.OptimalSolution.Alfa.ToString(), solution.OptimalSolution.Beta.ToString());
-
+                mytxt.WriteLine("Valor Óptimo (Z) ==> [{0}; {1}; {2}; {3}]", solution.OptimalSolution.L.ToString(), solution.OptimalSolution.U.ToString(), solution.OptimalSolution.Alfa.ToString(), solution.OptimalSolution.Beta.ToString());
+                mytxt.WriteLine("");
+                mytxt.WriteLine(Constantes.Separador);
 
                 mytxt.Close();
 

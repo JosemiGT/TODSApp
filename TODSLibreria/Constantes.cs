@@ -43,6 +43,8 @@ namespace TODSLibreria
         public const string TextoNoSolucion = "No se ha encontrado solución al problema.";
         public const string TextoNoDatos = "El formato de los datos introducidos no es correcto.";
 
+        public const string Separador = "#########################################################################################################";
+
         public enum NDType { NumType, AlfaBetaType};
 
         public static readonly TRFN fuzzyZero = new TRFN(0);
