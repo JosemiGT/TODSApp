@@ -35,6 +35,8 @@ namespace TODSLibreria.SimplexSpine
                     restriccionesEstand = stService.EstandarizarVector(restriccionesEstand).ToList();
                     if(stService.EstandarizarFuncionObjetivo(restriccionesEstand, ref funcionObjetivo)) { tabla = new Tableau(funcionObjetivo, restriccionesEstand); siCorrecto = true; }
                 }
+
+                helperExcel.CerrarLibroExcel();
             }
 
             return siCorrecto;
@@ -136,7 +138,7 @@ namespace TODSLibreria.SimplexSpine
                     helperExcel.ObtenerDimensionesHoja(indiceHoja, out int countFila, out int countCol))
                 {
                     string[,] data = helperExcel.ObtenerDatosHoja(NombreHoja);
-                    if(GetEquations(data, countFila - 1, countCol - 1, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction) && fuzzyEquations.Count > 0)
+                    if(GetEquations(path, data, countFila - 1, countCol - 1, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction) && fuzzyEquations.Count > 0)
                     {
                         List<FuzzyVectorEquation> constraints = fpsService.StandardizeConstraints(fuzzyEquations).ToList();
                         if (fpsService.StandardizeObjectiveFunction(fuzzyEquations, ref fuzzyObjectiveFunction)) { tableau = new FuzzyTableau(constraints, fuzzyObjectiveFunction); isCorrect = true; }
@@ -149,13 +151,14 @@ namespace TODSLibreria.SimplexSpine
             return isCorrect;
         }
 
-        public bool GetEquations(string[,] data, int numRow, int numCol, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction)
+        public bool GetEquations(string path, string[,] data, int numRow, int numCol, out List<string> header, out List<FuzzyConstraint> fuzzyEquations, out FuzzyObjectiveFunction fuzzyObjectiveFunction, out List<Constraint> equations, out ObjectiveFunction objectiveFunction)
         {
             equations = new List<Constraint>();
             fuzzyEquations = new List<FuzzyConstraint>();
             header = new List<string>();
             fuzzyObjectiveFunction = null;
             objectiveFunction = null;
+            Config _config = new Config();
 
             if (data != null && !Decimal.TryParse(data[0, 0], out decimal num))
             {
@@ -201,6 +204,18 @@ namespace TODSLibreria.SimplexSpine
                         else if (op == Constantes.IgualQue && valuesFuzzy.Count > 0) { fuzzyObjectiveFunction = new FuzzyObjectiveFunction(header, valuesFuzzy, new TRFN(0), isMax); }
                     }
                 }
+
+                if (_config.AnyFuzzyParameter && fuzzyObjectiveFunction != null && GetFuzzyParameter(path, _config.FuzzyParameterName, out List<FuzzyParameter> parameters))
+                {
+
+                    TRFNOperation fuzzyOperation = new TRFNOperation();
+                    fuzzyObjectiveFunction = new FuzzyObjectiveFunction(fuzzyObjectiveFunction.Header, 
+                        fuzzyOperation.MultiplicationFuzzyConstant(fuzzyObjectiveFunction.FuzzyNums, parameters.Select(p => p.Value).ToList()), 
+                        fuzzyObjectiveFunction.IndependentTerm, 
+                        fuzzyObjectiveFunction.IsMax);
+
+                }
+
             }
 
             return ((header.Count > 0 && fuzzyEquations.Count > 0 && fuzzyObjectiveFunction != null) || (header.Count > 0 && equations.Count > 0 && objectiveFunction != null));
@@ -224,11 +239,13 @@ namespace TODSLibreria.SimplexSpine
                     {
                         TRFN numT = null;
                         string parName = string.Empty;
-                        for (int j = 0; j < countCol - 1; i++)
+                        bool isNamePass = false;
+                        for (int j = 0; j < countCol - 1; j++)
                         {
-                            if(!GetFuzzyNumber(data[i,j],out numT))
+                            if(!GetFuzzyNumber(data[i,j],out numT) && !isNamePass)
                             {
                                 parName = data[i, j];
+                                isNamePass = true;
                             }
                         }
 
@@ -236,6 +253,8 @@ namespace TODSLibreria.SimplexSpine
                     }
 
                 }
+
+                helperExcel.CerrarLibroExcel();
 
             }
 

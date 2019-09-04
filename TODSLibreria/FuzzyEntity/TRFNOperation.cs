@@ -15,6 +15,13 @@ namespace TODSLibreria.FuzzyEntity
             return new TRFN(Constantes.NDType.AlfaBetaType, N1.L + N2.L, N1.U + N2.U, N1.Alfa + N2.Alfa, N1.Beta + N2.Beta);
         }
 
+        public TRFN Addition(List<TRFN> NL)
+        {
+            TRFN result = new TRFN(0);
+            foreach(TRFN N in NL) { result = Addition(result, N); }
+            return result;
+        }
+
         public TRFN Subtraction(TRFN N1, TRFN N2)
         {
             return new TRFN(Constantes.NDType.AlfaBetaType, N1.L - N2.L, N1.U - N2.U, N1.Alfa + N2.Alfa, N1.Beta + N2.Beta);
@@ -76,6 +83,16 @@ namespace TODSLibreria.FuzzyEntity
         public IEnumerable<TRFN> OperateFuzzyConstant(IEnumerable<double> ListN, string op, TRFN constant)
         {
             return ListN.Select(x => OperateConstant(constant, op, x)).ToList();
+        }
+
+        public IEnumerable<TRFN> MultiplicationFuzzyConstant(IEnumerable<TRFN> ListN, TRFN constant)
+        {
+            return ListN.Select(x => Multiplication(constant, x)).ToList();
+        }
+
+        public IEnumerable<TRFN> MultiplicationFuzzyConstant(IEnumerable<TRFN> ListN, List<TRFN> constants)
+        {
+            return ListN.Select(x => Multiplication(Addition(constants), x)).ToList();
         }
 
         public IEnumerable<TRFN> Operate(IEnumerable<TRFN> ListN1, string op, IEnumerable<double> ListN2)

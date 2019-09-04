@@ -54,13 +54,14 @@ namespace TODSTest
         [TestMethod]
         public void FuzzySimplexAnddata()
         {
-            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\Test.xlsx";
+            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\FuzzyLPTProblem.xlsx";
             SimplexSpine spine = new SimplexSpine(path, new Config());
 
-            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
-            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyInitialTest");
-            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTestMin");
-            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTest");
+            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTest");
+            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyInitialTest");
+            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTestMin");
+            //spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "FuzzyTransportTest");
+            spine.ExecuteSimplexSpine(Constantes.FuzzyPrimalSimplex, "ModeloTransporteDifuso");
         }
 
         [TestMethod]
@@ -98,6 +99,15 @@ namespace TODSTest
             TRFN result = fop.Multiplication(n1, n2);
             //result = fop.OperateConstant(result, Constantes.Division, 13);
             //result = fop.MakeNegative(result);
+
+        }
+
+        [TestMethod]
+        public void GetFuzzyParameter()
+        {
+            string path = @"C:\Users\josa.gamarro.tornay\Desktop\Test\FuzzyLPTProblem.xlsx";
+            ConectorDatosApp conector = new ConectorDatosApp();
+            conector.GetFuzzyParameter(path, "FuzzyParameter", out List<FuzzyParameter> fuzzyParameter);
 
         }
     }
